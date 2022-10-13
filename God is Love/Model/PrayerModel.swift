@@ -17,7 +17,6 @@ public struct PrayerModel: Identifiable, Codable{
     let date: String
     let prayerCount: Int
     let nextCount: Int
-    let hasImage: Bool
         
     enum CodingKeys: String,  CodingKey{
         
@@ -27,10 +26,7 @@ public struct PrayerModel: Identifiable, Codable{
         case prayer
         case date
         case prayerCount
-        case nextCount
-        case hasImage
-
-        
+        case nextCount 
         
     }
 

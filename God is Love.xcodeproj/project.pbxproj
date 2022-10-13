@@ -19,6 +19,7 @@
 		F42F018528B5E95600BAAEC3 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F42F018428B5E95600BAAEC3 /* GoogleService-Info.plist */; };
 		F42F018828B70CB300BAAEC3 /* PrayersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F42F018728B70CB300BAAEC3 /* PrayersView.swift */; };
 		F42F018A28B7254400BAAEC3 /* PrayersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F42F018928B7254400BAAEC3 /* PrayersViewModel.swift */; };
+		F461B41828CD9DE500C39149 /* machineLearningModel.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = F461B41728CD9DE500C39149 /* machineLearningModel.mlmodel */; };
 		F4B77B8628B92BBA00226F80 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4B77B8528B92BBA00226F80 /* LoginViewModel.swift */; };
 		F4B77B8828BC5D8D00226F80 /* UserInfoScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4B77B8728BC5D8D00226F80 /* UserInfoScreen.swift */; };
 		F4BC598C28BD159D00D16259 /* UserInfoScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4BC598B28BD159D00D16259 /* UserInfoScreenViewModel.swift */; };
@@ -42,6 +43,7 @@
 		F42F018428B5E95600BAAEC3 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		F42F018728B70CB300BAAEC3 /* PrayersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayersView.swift; sourceTree = "<group>"; };
 		F42F018928B7254400BAAEC3 /* PrayersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayersViewModel.swift; sourceTree = "<group>"; };
+		F461B41728CD9DE500C39149 /* machineLearningModel.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = machineLearningModel.mlmodel; sourceTree = "<group>"; };
 		F4B77B8428B9173100226F80 /* God is Love.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "God is Love.entitlements"; sourceTree = "<group>"; };
 		F4B77B8528B92BBA00226F80 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		F4B77B8728BC5D8D00226F80 /* UserInfoScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoScreen.swift; sourceTree = "<group>"; };
@@ -147,6 +149,7 @@
 		F4BC598D28BDB54800D16259 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				F461B41728CD9DE500C39149 /* machineLearningModel.mlmodel */,
 				F4BC598E28BDB56300D16259 /* PrayerModel.swift */,
 				F4E598D328C1C1FC00226372 /* PhotoPicker.swift */,
 			);
@@ -278,6 +281,7 @@
 				F41F603528B5D601008A4EBF /* God_is_Love.xcdatamodeld in Sources */,
 				F41F602928B5D600008A4EBF /* God_is_LoveApp.swift in Sources */,
 				F41F603C28B5DBEB008A4EBF /* PrayerRequestView.swift in Sources */,
+				F461B41828CD9DE500C39149 /* machineLearningModel.mlmodel in Sources */,
 				F4E598D428C1C1FC00226372 /* PhotoPicker.swift in Sources */,
 				F41F603F28B5E767008A4EBF /* PrayerRequestViewModel.swift in Sources */,
 				F4B77B8628B92BBA00226F80 /* LoginViewModel.swift in Sources */,
@@ -337,7 +341,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -391,7 +395,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;

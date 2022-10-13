@@ -11,7 +11,7 @@ import Firebase
 
 struct PhotoPicker: UIViewControllerRepresentable{
     
-    @Binding var profileImage: UIImage
+    @Binding var profileImage: UIImage?
     @Binding var userSelectedImage: Bool
 
     
