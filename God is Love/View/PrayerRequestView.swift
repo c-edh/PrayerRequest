@@ -88,9 +88,11 @@ struct PrayerRequestView: View {
                     
                     Button(
                         action:{
-                            viewModel.uploadPrayerRequest(name: name,
-                                                          prayerRequest: prayerInfo,
-                                                          prayerImage: prayerImage)
+                            
+                            viewModel.getUserPrayerRequest(name: name, prayerRequest: prayerInfo, prayerImage: prayerImage)
+//                            viewModel.uploadPrayerRequest(name: name,
+//                                                          prayerRequest: prayerInfo,
+//                                                          prayerImage: prayerImage)
                             
                             
                         },

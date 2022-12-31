@@ -14,10 +14,11 @@ class LoginViewModel: ObservableObject{
     @Published var nonce = ""
     @Published var login = false
     
+    let firebaseManager = FirebaseManager()
+    
     func authenticate(credential: ASAuthorizationAppleIDCredential){
-        
         guard let token = credential.identityToken else{
-            print("error with firebase")
+            print("error with identityToken")
             return
         }
         
@@ -25,33 +26,20 @@ class LoginViewModel: ObservableObject{
             print("Token error")
             return
         }
-        
-        let firebaseCredential = OAuthProvider.credential(withProviderID: "apple.com", idToken: tokenString, rawNonce: nonce)
-        
-        Auth.auth().signIn(with: firebaseCredential) { (result, error) in
-            if let error = error{
-                print(error.localizedDescription)
-                return
-            }
-            self.login = true
-            print("login success")
-            
+
+        firebaseManager.firebaseCredential(idToken: tokenString, nonce: nonce){isLogin in
+            self.login = isLogin
         }
-        
     }
     
     func logOut(){
-        let firebaseAuth = Auth.auth()
-          do{
-            try firebaseAuth.signOut()
-          }catch let signOutError as NSError {
-              return
-            print("Error signing out: %@", signOutError)
-          }
-        self.login = false
+        self.login = firebaseManager.logOutFromFirebase()
     }
     
 }
+
+
+//MARK: - Encryption
 
 func sha256(_ input: String) -> String {
     let inputData = Data(input.utf8)

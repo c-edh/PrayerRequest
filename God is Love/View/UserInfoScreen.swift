@@ -30,26 +30,28 @@ struct UserInfoScreen: View {
                     .onAppear{
                         viewModel.getUserPrayersID()
                     }
-                
-                List{
-                    ForEach(viewModel.userPrayers){ prayer in
-                        VStack{
-                            UserPrayers(prayer: prayer, prayerImage: viewModel.prayerImages)
-                                .onTapGesture {
-                                    //
-                                    self.prayer = prayer.prayer
-                                    viewModel.getPrayerMessages(with: prayer.docID) { message in
+//                    .onChange(of: viewModel.userPrayers) { newValue in
+//                        <#code#>
+//                    }
+                    List{
+                        ForEach(viewModel.userPrayers!){ prayer in
+                            VStack{
+                                UserPrayers(prayer: prayer, prayerImage: viewModel.prayerImages)
+                                    .onTapGesture {
+                                        //
+                                        self.prayer = prayer.prayer
+                                        viewModel.getPrayerMessages(with: prayer.docID) { message in
+                                            
+                                            self.prayerMessage = message
+                                            prayerMessageIsShowing = true
+                                        }
                                         
-                                        self.prayerMessage = message
-                                        prayerMessageIsShowing = true
                                     }
-                                    
-                                }
+                            }
+                            
                         }
                         
-                    }
-                    
-                }.frame(width: UIScreen.main.bounds.width).listRowBackground(Color.clear)
+                    }.frame(width: UIScreen.main.bounds.width).listRowBackground(Color.clear)
                 
                 // .overlay(Divider().background(.blue), alignment: .top)
                 

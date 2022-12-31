@@ -24,6 +24,8 @@
 		F4B77B8828BC5D8D00226F80 /* UserInfoScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4B77B8728BC5D8D00226F80 /* UserInfoScreen.swift */; };
 		F4BC598C28BD159D00D16259 /* UserInfoScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4BC598B28BD159D00D16259 /* UserInfoScreenViewModel.swift */; };
 		F4BC598F28BDB56300D16259 /* PrayerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4BC598E28BDB56300D16259 /* PrayerModel.swift */; };
+		F4DCE662295FA4FC00496CAB /* FirebaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4DCE661295FA4FC00496CAB /* FirebaseManager.swift */; };
+		F4DCE6642960C4D500496CAB /* K.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4DCE6632960C4D500496CAB /* K.swift */; };
 		F4E598D428C1C1FC00226372 /* PhotoPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4E598D328C1C1FC00226372 /* PhotoPicker.swift */; };
 /* End PBXBuildFile section */
 
@@ -49,6 +51,8 @@
 		F4B77B8728BC5D8D00226F80 /* UserInfoScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoScreen.swift; sourceTree = "<group>"; };
 		F4BC598B28BD159D00D16259 /* UserInfoScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoScreenViewModel.swift; sourceTree = "<group>"; };
 		F4BC598E28BDB56300D16259 /* PrayerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerModel.swift; sourceTree = "<group>"; };
+		F4DCE661295FA4FC00496CAB /* FirebaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseManager.swift; sourceTree = "<group>"; };
+		F4DCE6632960C4D500496CAB /* K.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = K.swift; sourceTree = "<group>"; };
 		F4E598D328C1C1FC00226372 /* PhotoPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPicker.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -104,6 +108,8 @@
 			children = (
 				F4B77B8428B9173100226F80 /* God is Love.entitlements */,
 				F41F602828B5D600008A4EBF /* God_is_LoveApp.swift */,
+				F4DCE661295FA4FC00496CAB /* FirebaseManager.swift */,
+				F4DCE6632960C4D500496CAB /* K.swift */,
 				F4BC598D28BDB54800D16259 /* Model */,
 				F42F018628B70C7900BAAEC3 /* ViewModel */,
 				F41F603D28B5DBF2008A4EBF /* View */,
@@ -127,6 +133,7 @@
 		F41F603D28B5DBF2008A4EBF /* View */ = {
 			isa = PBXGroup;
 			children = (
+				F4E598D328C1C1FC00226372 /* PhotoPicker.swift */,
 				F41F602A28B5D600008A4EBF /* ContentView.swift */,
 				F41F603B28B5DBEB008A4EBF /* PrayerRequestView.swift */,
 				F42F018728B70CB300BAAEC3 /* PrayersView.swift */,
@@ -151,7 +158,6 @@
 			children = (
 				F461B41728CD9DE500C39149 /* machineLearningModel.mlmodel */,
 				F4BC598E28BDB56300D16259 /* PrayerModel.swift */,
-				F4E598D328C1C1FC00226372 /* PhotoPicker.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -283,6 +289,8 @@
 				F41F603C28B5DBEB008A4EBF /* PrayerRequestView.swift in Sources */,
 				F461B41828CD9DE500C39149 /* machineLearningModel.mlmodel in Sources */,
 				F4E598D428C1C1FC00226372 /* PhotoPicker.swift in Sources */,
+				F4DCE662295FA4FC00496CAB /* FirebaseManager.swift in Sources */,
+				F4DCE6642960C4D500496CAB /* K.swift in Sources */,
 				F41F603F28B5E767008A4EBF /* PrayerRequestViewModel.swift in Sources */,
 				F4B77B8628B92BBA00226F80 /* LoginViewModel.swift in Sources */,
 			);

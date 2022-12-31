@@ -9,10 +9,12 @@ import Foundation
 import Firebase
 
 class UserInfoScreenViewModel: ObservableObject{
-    @Published var userPrayers : [PrayerModel] = []
+    
+    @Published var userPrayers : [PrayerModel]?
     @Published var prayerImages: [String:UIImage] = [:]
 
     private var db = Firestore.firestore()
+    let firebaseManager = FirebaseManager()
 
  
     func getUserPrayersID(){
@@ -23,66 +25,46 @@ class UserInfoScreenViewModel: ObservableObject{
         
         self.db.collection("Users").document(user.uid).collection("Prayers").getDocuments { (data, error) in
             if let data = data{
+                
                 for document in data.documents{
+                    
+                    let id = document.documentID
+                    
+                    self.firebaseManager.getPrayerRequestByID(id: id, completion: <#T##([String : Any]) -> ()#>)
                     self.getPrayersInfo(prayerID: document.documentID)
                     print(document)
                     
                 }
             }
         }
+        
     }
+    
+
     
     private func getPrayersInfo(prayerID : String){
         
-        self.db.collection("Prayers").document(prayerID).getDocument { (data, error) in
-            if let error = error{
-                print(error.localizedDescription)
-            }else{
-                guard let prayer = data else{
-                    print("Couldnt get data")
-                    return
-                }
- 
-                    self.userPrayers.append(PrayerModel(docID: prayerID,
-                                             name: (prayer["Name"] as? String) ?? "N/A",
-                                             userID: (prayer["UserID"] as? String) ?? "N/A",
-                                             prayer: (prayer["Prayer Request"] as? String) ?? "N/A",
-                                             date: (prayer["Date"] as? String) ?? "N/A",
-                                             prayerCount: (prayer["Prayer Count"] as? Int) ?? 0,
-                                             nextCount: (prayer["Next Count"] as? Int) ?? 0))
-            
-            
-            //PrayerID -> PrayerImage
-                if prayer["hasImage"] as? Bool ?? false{
-                    self.getPrayerImage(with:prayerID){ image in
-                        self.prayerImages[prayerID] = image
-                    }
-                }
-                
-            }
-        }
+//        self.db.collection("Prayers").document(prayerID).getDocument { (data, error) in
+//            if let error = error{
+//                print(error.localizedDescription)
+//            }else{
+//                guard let prayer = data else{
+//                    print("Couldnt get data")
+//                    return
+//                }
+//                DispatchQueue.main.async {
+//                    self.userPrayers?.append(PrayerModel(docID: prayerID,
+//                                                         name: (prayer["Name"] as? String) ?? "N/A",
+//                                                         userID: (prayer["UserID"] as? String) ?? "N/A",
+//                                                         prayer: (prayer["Prayer Request"] as? String) ?? "N/A",
+//                                                         date: (prayer["Date"] as? String) ?? "N/A",
+//                                                         prayerCount: (prayer["Prayer Count"] as? Int) ?? 0,
+//                                                         nextCount: (prayer["Next Count"] as? Int) ?? 0))}
+//            }
+//        }
     }
-    //This was change
-    private func getPrayers(id: String, completion: @escaping ([String:Any]?) -> ()) {
-        
-        self.db.collection("Prayers").document(id).getDocument { (data, error) in
-            if let error = error{
-                print(error.localizedDescription)
-                completion(nil)
-            }else{
-                guard let data = data, let prayer = data as? [String:Any] else{
-                    print("Couldnt get data")
-                    return
-                }
-                
-                
-                completion(prayer)
-                
-            }
-            
-        }
-        
-    }
+
+    
     
     private func getPrayerImage(with prayerID: String, completion: @escaping (UIImage) -> Void){
 
@@ -128,10 +110,4 @@ class UserInfoScreenViewModel: ObservableObject{
         
     }
     
-//    func getMessages(with prayerID: String){
-//        getPrayerMessages(with: prayerID) { messages in
-//            self.prayerMessages = messages
-//        }
-//    }
-//    
 }
