@@ -17,6 +17,24 @@ class PrayersViewModel: ObservableObject{
     let firebaseManager = FirebaseManager()
     
     
+    //This was change
+    func getPrayer() -> PrayerModel?{
+        
+        guard let prayer = prayers.peek() else{
+            return nil
+        }
+        return prayer
+    }
+    
+    func getPrayersRequest(){
+        
+        firebaseManager.getPrayerRequest { prayer in
+            self.prayers.push(prayer)
+        }
+        
+        
+    }
+    
     
     func userPray(_ message: String){
         guard let id = prayers.peek()?.docID, let prayerCount = prayers.peek()?.prayerCount, let date = getTimeStamp()["Date"] else{
@@ -42,27 +60,7 @@ class PrayersViewModel: ObservableObject{
         prayers.pop()
     }
     
-    
-    //This was change
-    func getPrayer() -> PrayerModel?{
-        
-        guard let prayer = prayers.peek() else{
-            return nil
-        }
-        return prayer
-    }
-    
-    func getPrayersRequest(){
-        
-        firebaseManager.getPrayerRequestFromFireBase
-        
-        
-    }
-    
-    
-    
-    
-    
+
     private func getTimeStamp() -> [String:String]{
         let date = Date()
         let dateFormat = DateFormatter()

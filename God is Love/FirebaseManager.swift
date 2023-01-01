@@ -21,7 +21,7 @@ enum FirebaseCollection: String{
     case PrayersCollection = "Prayers"
     case ReportedCollection = "Reported"
     case UserCollection = "Users"
-
+    
 }
 
 
@@ -41,7 +41,7 @@ class FirebaseManager{
         }
         
         let credential = OAuthProvider.credential(withProviderID: "apple.com", idToken: idToken, rawNonce: nonce)
-
+        
         Auth.auth().signIn(with: credential) { (result, error) in
             if let error = error{
                 print(error.localizedDescription)
@@ -56,13 +56,13 @@ class FirebaseManager{
     
     func logOutFromFirebase() -> Bool{
         let firebaseAuth = Auth.auth()
-          do{
+        do{
             try firebaseAuth.signOut()
-              return true
-          }catch let signOutError as NSError {
-              print("Error signing out: %@", signOutError)
-              return false
-          }
+            return true
+        }catch let signOutError as NSError {
+            print("Error signing out: %@", signOutError)
+            return false
+        }
     }
     
     
@@ -100,6 +100,20 @@ class FirebaseManager{
             
         }
         
+        db.collection(FirebaseCollection.UserCollection.rawValue).document(user.uid).collection(FirebaseCollection.PrayersCollection.rawValue).addDocument(data: ["Name" : name ?? "Anonymous",
+                                                                                                                                                                  "UserID": user.uid,
+                                                                                                                                                                  "Prayer Request" : prayerRequest,
+                                                                                                                                                                  "Date": date ?? "N/A",
+                                                                                                                                                                  "Prayer Count": 0,
+                                                                                                                                                                  "Next Count": 0,
+                                                                                                                                                                 ]){ err in
+            if let err = err {
+                print("Error adding document: \(err)")
+            } else {
+                print("Document added with ID: \(ref!.documentID)")
+            }
+        }
+        
         
         if let prayerImage = prayerImage, let documentID = ref?.documentID{
             print("Added Image to Document Reference")
@@ -109,7 +123,7 @@ class FirebaseManager{
         
     }
     
-
+    
     
     private func addPrayerRequestImageToFirebase(documentId: String, image: UIImage){
         
@@ -130,18 +144,18 @@ class FirebaseManager{
             if error == nil, metaData != nil{
                 print("Image stored sucessfully")
             }else{
-               // print(error?.localizedDescription)
+                // print(error?.localizedDescription)
                 print("Upload fail")
             }
         }
-    
+        
     }
     
     
     func userPrayForPrayer(with id: String, message: String?, date: String, prayerCount: Int){
         
         db.collection(FirebaseCollection.PrayersCollection.rawValue).document(id).updateData(["Prayer Count": prayerCount])
-
+        
         if let message = message{
             addMessageToPrayerRequest(id: id, message: message, date: date)
         }
@@ -157,13 +171,13 @@ class FirebaseManager{
     }
     
     func prayerSkip(count: Int, prayer: PrayerModel){
-  
+        
         db.collection(FirebaseCollection.PrayersCollection.rawValue).document(prayer.prayer).updateData(["Next Count": count])
         
         //If Prayer Request was Skipped 10 times, it is reported
         if count <= -10{
             db.collection(FirebaseCollection.ReportedCollection.rawValue).document().setData(["Prayer": prayer.prayer,
-                                                          "User ID": prayer.userID])
+                                                                                              "User ID": prayer.userID])
         }
     }
     
@@ -193,7 +207,7 @@ class FirebaseManager{
     
     
     
-    func getPrayerRequest(){
+    func getPrayerRequest(completion: @escaping (PrayerModel) -> ()){
         db.collection("Prayers").getDocuments { (data, error) in
             if error == nil{
                 print(error?.localizedDescription)
@@ -202,26 +216,18 @@ class FirebaseManager{
                 return
             }
             for document in data.documents{
-                let prayer = document.data()
                 
-                //Get's every prayer besides the user's
-                if prayer["UserID"] as? String != Auth.auth().currentUser?.uid{
-                    self.prayers.push(PrayerModel(docID: document.documentID,
-                                                  name: (prayer["Name"] as? String) ?? "N/A",
-                                                  userID: (prayer["UserID"] as? String) ?? "N/A",
-                                                  prayer: (prayer["Prayer Request"] as? String) ?? "N/A",
-                                                  date: (prayer["Date"] as? String) ?? "N/A",
-                                                  prayerCount: (prayer["Prayer Count"] as? Int) ?? 0,
-                                                  nextCount: (prayer["Next Count"] as? Int) ?? 0))
+                self.getPrayerImage(id: document.documentID) {image in
                     
-                }
-                
-                
-                self.firebaseManager.getPrayerImage(id: document.documentID) {image in
+                    
                     guard let image = image else{
+                        let prayer = PrayerModel(prayerDocument: document, image: nil)
+                        completion(prayer)
                         return
                     }
-                    self.PrayerImage[document.documentID] = image
+                    
+                    let prayer = PrayerModel(prayerDocument: document, image: image)
+                    completion(prayer)
                     
                 }
             }
@@ -229,36 +235,97 @@ class FirebaseManager{
     }
     
     
-    func getPrayerRequestByID(id: String, completion: @escaping ([String:Any]) -> () ){
-        self.db.collection("Prayers").document(id).getDocument { (data, error) in
+    func getPrayerRequestByID(id: String, completion: @escaping (PrayerModel) -> () ){
+        db.collection("Prayers").document(id).getDocument { (data, error) in
             if let error = error{
                 print(error.localizedDescription)
             }else{
-                guard let prayer = data as? [String:Any] else{
+                guard let data = data else{
                     print("Couldnt get data")
                     return
                 }
-                completion(prayer)
-                //                DispatchQueue.main.async {
-                //                    self.userPrayers?.append(PrayerModel(docID: prayerID,
-                //                                                         name: (prayer["Name"] as? String) ?? "N/A",
-                //                                                         userID: (prayer["UserID"] as? String) ?? "N/A",
-                //                                                         prayer: (prayer["Prayer Request"] as? String) ?? "N/A",
-                //                                                         date: (prayer["Date"] as? String) ?? "N/A",
-                //                                                         prayerCount: (prayer["Prayer Count"] as? Int) ?? 0,
-                //                                                         nextCount: (prayer["Next Count"] as? Int) ?? 0))}
-                //            }
+                
+                self.getPrayerImage(id: id) { image in
+                    
+                    guard let image = image else{
+                        let prayer = PrayerModel(prayerDocument: data, image: nil)
+                        completion(prayer)
+                        return
+                    }
+                    
+                    let prayer = PrayerModel(prayerDocument: data, image: image)
+                    completion(prayer)
+                    
+                }
+                
             }
         }
         
     }
     
+    func getUserPrayerRequest(completion: @escaping ([PrayerModel]?) -> ()){
+        guard let user = Auth.auth().currentUser else{
+            completion(nil)
+            return
+        }
+        
+        db.collection(FirebaseCollection.UserCollection.rawValue).document(user.uid).collection(FirebaseCollection.PrayersCollection.rawValue).getDocuments { (data, error) in
+            if let data = data{
+                
+                var listOfUserPrayers: [PrayerModel] = []
+                
+                for document in data.documents{
+                    
+                    let id = document.documentID
+                    
+                    self.getPrayerRequestByID(id: id) { prayer in
+                        listOfUserPrayers.append(prayer)
+                    }
+                }
+                completion(listOfUserPrayers)
+                
+            }else{
+                completion(nil)
+            }
+            
+        }
+        
+        
+    }
+    
+    func getUserPrayerRequestMessages(for prayerID: String, completion: @escaping ([String]) -> ()){
+        db.collection(FirebaseCollection.PrayersCollection.rawValue).document(prayerID).getDocument { (data, error) in
+            if let error = error{
+                print(error.localizedDescription)
+            }
+            guard let data = data else{
+                print("Couldn't retrieve data from firebase")
+                return
+            }
+            print(data["Messages"])
+            
+            guard let messages = data["Messages"] as? [[String:String]] else{
+                print("messages error")
+                return
+            }
+            
+            var messageArray :[String] = []
+            
+            for message in messages {
+                messageArray.append(message["Message"] ?? "Message Error")
+            }
+            
+            completion(messageArray)
+            
+        }
+    }
     
     
-
-
-
-
-
-
+    
+    
+    
+    
+    
+    
+    
 }

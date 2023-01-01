@@ -20,7 +20,6 @@ class PrayerRequestViewModel: ObservableObject{
         let date = getTimeStamp()["Date"]
         
         suicidalDepressionDetection(prayerRequest)
-
         firebaseManager.addPrayerToFireBase(name: name, prayerRequest: prayerRequest, date: date, prayerImage: prayerImage)
     }
 

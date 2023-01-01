@@ -28,13 +28,11 @@ struct UserInfoScreen: View {
        
                 Text("Your Prayers Request").font(.system(size: 35)).fontWeight(.heavy).padding(.top,75)
                     .onAppear{
-                        viewModel.getUserPrayersID()
+                        viewModel.getUserPrayerRequest()
                     }
-//                    .onChange(of: viewModel.userPrayers) { newValue in
-//                        <#code#>
-//                    }
+
                     List{
-                        ForEach(viewModel.userPrayers!){ prayer in
+                        ForEach(viewModel.userPrayers){ prayer in
                             VStack{
                                 UserPrayers(prayer: prayer, prayerImage: viewModel.prayerImages)
                                     .onTapGesture {
@@ -94,8 +92,8 @@ struct UserPrayers: View {
                 }.padding()
                 
             }
-            if ((prayerImage?[prayer.docID]) != nil){
-                Image(uiImage:(prayerImage?[prayer.docID])!)
+            if (prayer.image != nil){
+                Image(uiImage:(prayer.image)!)
                     .resizable().aspectRatio(contentMode: .fit).frame(width:100).cornerRadius(100)
                 
             }

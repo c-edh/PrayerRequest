@@ -5,11 +5,13 @@
 //  Created by Corey Edh on 8/29/22.
 //
 
-import Foundation
+import FirebaseFirestore
+import UIKit.UIImage
 
-public struct PrayerModel: Identifiable, Codable{
-    public var id = UUID()
-
+struct PrayerModel:Identifiable{
+    var id: UUID
+    
+   
     let docID: String
     let name: String
     let userID: String
@@ -17,16 +19,20 @@ public struct PrayerModel: Identifiable, Codable{
     let date: String
     let prayerCount: Int
     let nextCount: Int
+    let image: UIImage?
+    
+    init(prayerDocument: DocumentSnapshot, image: UIImage?){
         
-    enum CodingKeys: String,  CodingKey{
+        self.id = UUID()
+        self.docID = prayerDocument.documentID
+        self.name = prayerDocument.get("Name") as? String ?? "No name"
+        self.userID = prayerDocument.get("UserID") as? String ?? "N/A"
+        self.prayer = prayerDocument.get("Prayer Request") as? String ?? "No Prayer"
+        self.date = prayerDocument.get("Date") as? String ?? "N/A"
+        self.prayerCount = prayerDocument.get("Prayer Count") as? Int ?? 0
+        self.nextCount = prayerDocument.get("Next Count") as? Int ?? 0
+        self.image = image
         
-        case docID
-        case name
-        case userID
-        case prayer
-        case date
-        case prayerCount
-        case nextCount 
         
     }
 
