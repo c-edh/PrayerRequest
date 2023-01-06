@@ -4,16 +4,15 @@
 //
 //  Created by Corey Edh on 8/24/22.
 //
-import Firebase
+
+import Foundation
 
 class PrayersViewModel: ObservableObject{
     
     @Published var prayers = PrayerStack()
     @Published var hasImage = false
-    @Published var PrayerImage : [String:UIImage] = [:]
-    
-    private var db = Firebase.Firestore.firestore()
-    
+   // @Published var PrayerImage : [String:UIImage] = [:]
+        
     let firebaseManager = FirebaseManager()
     
     

@@ -19,9 +19,9 @@ struct PrayerModel:Identifiable{
     let date: String
     let prayerCount: Int
     let nextCount: Int
-    let image: UIImage?
+    var image: UIImage?
     
-    init(prayerDocument: DocumentSnapshot, image: UIImage?){
+    init(prayerDocument: DocumentSnapshot){
         
         self.id = UUID()
         self.docID = prayerDocument.documentID
@@ -31,9 +31,13 @@ struct PrayerModel:Identifiable{
         self.date = prayerDocument.get("Date") as? String ?? "N/A"
         self.prayerCount = prayerDocument.get("Prayer Count") as? Int ?? 0
         self.nextCount = prayerDocument.get("Next Count") as? Int ?? 0
+        self.image = nil
+        
+        
+    }
+    
+    mutating func addImage(image: UIImage){
         self.image = image
-        
-        
     }
 
 

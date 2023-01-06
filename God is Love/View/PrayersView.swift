@@ -29,13 +29,8 @@ struct PrayersView: View {
                 
             }else{
                 VStack{
-                        PrayerView(
-                            hasImage:viewModel.hasImage,
-                            image:viewModel.PrayerImage[viewModel.getPrayer()!.docID],
-                            name: viewModel.getPrayer()!.name,
-                            date: viewModel.getPrayer()!.date,
-                            prayer: viewModel.getPrayer()!.prayer
-                        ).padding()
+                    PrayerView(prayer: viewModel.getPrayer())
+                        .padding()
                         
                     
                     if prayAdviceIsShowing{
@@ -100,7 +95,6 @@ struct PrayerAdvice:View{
                             textHintIsShowing.toggle()
                         }
                         
-                    
                 }
                 
             }
@@ -123,26 +117,19 @@ struct PrayerAdvice:View{
                 }
             }
         }.padding().overlay(RoundedRectangle(cornerRadius: 16).stroke(.blue, lineWidth: 4))
-        
-        
-        
-        
     }
 }
 
 struct PrayerView: View {
-    let hasImage: Bool
-    let image: UIImage?
-    let name: String
-    let date: String
-    let prayer: String
+    
+    let prayer: PrayerModel?
     
     var body: some View {
         
         VStack{
             Spacer()
                 .frame(height: 20.0)
-            if let image = image{
+            if let image = prayer?.image{
                 Image(uiImage:image)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
@@ -154,18 +141,18 @@ struct PrayerView: View {
             HStack{
                 HStack{
                     Text("For")
-                    Text(name)
+                    Text(prayer?.name ?? "Anoynmous")
                 }.font(.system(size: 25).bold())
                 
                 Spacer()
-                Text(date)
+                Text(prayer?.date ?? "N/A")
             }
             .padding()
             .frame(width: UIScreen.main.bounds.width, alignment: .leading)
             
             ScrollView{
                 
-                Text(prayer)
+                Text(prayer?.prayer ?? "No Prayer")
                     .font(.system(size: 35))
                     .fontWeight(.bold)
                 

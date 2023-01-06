@@ -9,34 +9,39 @@ import Foundation
 import Firebase
 
 class UserInfoScreenViewModel: ObservableObject{
+
+    
     
     @Published var userPrayers : [PrayerModel] = []
-    @Published var prayerImages: [String:UIImage] = [:]
+    @Published var messageForPrayer: [String] = []
 
-    private var db = Firestore.firestore()
     let firebaseManager = FirebaseManager()
 
  
     func getUserPrayerRequest(){
+        firebaseManager.delegate = self
         print("this ran")
-        firebaseManager.getUserPrayerRequest { listOfUserPrayers in
-            
-            guard let listOfUserPrayers = listOfUserPrayers else{
-                return
-            }
-            
-            print(listOfUserPrayers)
-            
-            DispatchQueue.main.async {
-                self.userPrayers = listOfUserPrayers
-            }
-        }
+        firebaseManager.getUserPrayerRequest()
     
     }
     
-    func getPrayerMessages(with prayerID:String, onCompletion: @escaping ([String]) -> Void){
-        firebaseManager.getUserPrayerRequestMessages(for: prayerID) { messages in
-            onCompletion(messages)
+    func getPrayerMessages(with prayerID:String){
+        firebaseManager.getUserPrayerRequestMessages(for: prayerID)
+    }
+    
+}
+
+extension UserInfoScreenViewModel: FirebaseManagerProtocol{
+    
+    func retrievedPrayersRequest(prayerRequest: PrayerModel) {
+        DispatchQueue.main.async {
+            self.userPrayers.append(prayerRequest)
+        }
+    }
+    
+    func retrievedPrayerMessagee(message: [String]) {
+        DispatchQueue.main.async{
+            self.messageForPrayer = message
         }
     }
     

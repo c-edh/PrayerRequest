@@ -34,17 +34,15 @@ struct UserInfoScreen: View {
                     List{
                         ForEach(viewModel.userPrayers){ prayer in
                             VStack{
-                                UserPrayers(prayer: prayer, prayerImage: viewModel.prayerImages)
+                                UserPrayers(prayer: prayer)
                                     .onTapGesture {
-                                        //
-                                        self.prayer = prayer.prayer
-                                        viewModel.getPrayerMessages(with: prayer.docID) { message in
-                                            
-                                            self.prayerMessage = message
-                                            prayerMessageIsShowing = true
-                                        }
                                         
+                                        self.prayer = prayer.prayer
+                                        
+                                        viewModel.getPrayerMessages(with: prayer.docID)
+                                        prayerMessageIsShowing = true
                                     }
+                                
                             }
                             
                         }
@@ -57,7 +55,7 @@ struct UserInfoScreen: View {
             
         }
             .sheet(isPresented: $prayerMessageIsShowing) {
-                PrayerMessageView(prayerMessages: prayerMessage, prayer: prayer)
+                PrayerMessageView(prayerMessages: viewModel.messageForPrayer, prayer: prayer)
             }
     }
 }
@@ -71,8 +69,6 @@ struct UserInfoScreen_Previews: PreviewProvider {
 
 struct UserPrayers: View {
     @State var prayer: PrayerModel
-    
-    var prayerImage: [String:UIImage]?
     
     var defaultImage = UIImage(systemName: "photo")!
     

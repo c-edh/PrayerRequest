@@ -12,7 +12,8 @@ import FirebaseFirestore
 
 protocol FirebaseManagerProtocol{
     
-    func retrievedPrayersRequestFromFirebase()
+    func retrievedPrayersRequest(prayerRequest: PrayerModel)
+    func retrievedPrayerMessagee(message: [String])
     
 }
 
@@ -24,11 +25,11 @@ enum FirebaseCollection: String{
     
 }
 
-
-
 class FirebaseManager{
     
     private let db = Firebase.Firestore.firestore()
+    
+    var delegate: FirebaseManagerProtocol?
     
     //MARK: - User Authentication to Firebase
     
@@ -194,6 +195,7 @@ class FirebaseManager{
         prayerStoredImageRef.getData(maxSize: 1*1024*1024) { data, error in
             if let error = error{
                 print(error.localizedDescription, "Error has occured, default image is displayed")
+                completion(nil)
             }else{
                 guard let data = data, let userStoredImage = UIImage(data: data) else{
                     completion(nil)
@@ -218,15 +220,13 @@ class FirebaseManager{
             for document in data.documents{
                 
                 self.getPrayerImage(id: document.documentID) {image in
-                    
+                    var prayer = PrayerModel(prayerDocument: document)
                     
                     guard let image = image else{
-                        let prayer = PrayerModel(prayerDocument: document, image: nil)
                         completion(prayer)
                         return
                     }
-                    
-                    let prayer = PrayerModel(prayerDocument: document, image: image)
+                    prayer.addImage(image: image)
                     completion(prayer)
                     
                 }
@@ -246,14 +246,14 @@ class FirebaseManager{
                 }
                 
                 self.getPrayerImage(id: id) { image in
-                    
+                    var prayer = PrayerModel(prayerDocument: data)
+
                     guard let image = image else{
-                        let prayer = PrayerModel(prayerDocument: data, image: nil)
                         completion(prayer)
                         return
                     }
                     
-                    let prayer = PrayerModel(prayerDocument: data, image: image)
+                    prayer.addImage(image: image)
                     completion(prayer)
                     
                 }
@@ -263,37 +263,53 @@ class FirebaseManager{
         
     }
     
-    func getUserPrayerRequest(completion: @escaping ([PrayerModel]?) -> ()){
+    
+    func getPrayerRequestByID(id: String){
+        db.collection("Prayers").document(id).getDocument { (data, error) in
+            if let error = error{
+                print(error.localizedDescription)
+            }else{
+                guard let data = data else{
+                    print("Couldnt get data")
+                    return
+                }
+                
+                self.getPrayerImage(id: id) { image in
+                    var prayer = PrayerModel(prayerDocument: data)
+
+                    guard let image = image else{
+                        self.delegate?.retrievedPrayersRequest(prayerRequest: prayer)
+                        return
+                    }
+                    
+                    prayer.addImage(image: image)
+                    self.delegate?.retrievedPrayersRequest(prayerRequest: prayer)
+                    
+                }
+                
+            }
+        }
+        
+    }
+    
+    func getUserPrayerRequest(){
         guard let user = Auth.auth().currentUser else{
-            completion(nil)
             return
         }
         
         db.collection(FirebaseCollection.UserCollection.rawValue).document(user.uid).collection(FirebaseCollection.PrayersCollection.rawValue).getDocuments { (data, error) in
             if let data = data{
-                
-                var listOfUserPrayers: [PrayerModel] = []
-                
                 for document in data.documents{
-                    
                     let id = document.documentID
-                    
-                    self.getPrayerRequestByID(id: id) { prayer in
-                        listOfUserPrayers.append(prayer)
-                    }
+                    self.getPrayerRequestByID(id: id)
                 }
-                completion(listOfUserPrayers)
-                
-            }else{
-                completion(nil)
             }
-            
         }
         
         
     }
     
-    func getUserPrayerRequestMessages(for prayerID: String, completion: @escaping ([String]) -> ()){
+    func getUserPrayerRequestMessages(for prayerID: String){
         db.collection(FirebaseCollection.PrayersCollection.rawValue).document(prayerID).getDocument { (data, error) in
             if let error = error{
                 print(error.localizedDescription)
@@ -314,8 +330,8 @@ class FirebaseManager{
             for message in messages {
                 messageArray.append(message["Message"] ?? "Message Error")
             }
-            
-            completion(messageArray)
+            self.delegate?.retrievedPrayerMessagee(message: messageArray)
+          //  completion(messageArray)
             
         }
     }
