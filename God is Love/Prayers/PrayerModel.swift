@@ -20,10 +20,12 @@ struct PrayerModel:Identifiable{
     let prayerCount: Int
     let nextCount: Int
     var image: UIImage?
+    var snapShot: DocumentSnapshot
     
     init(prayerDocument: DocumentSnapshot){
         
         self.id = UUID()
+        self.snapShot = prayerDocument
         self.docID = prayerDocument.documentID
         self.name = prayerDocument.get("Name") as? String ?? "No Name"
         self.userID = prayerDocument.get("UserID") as? String ?? "N/A"

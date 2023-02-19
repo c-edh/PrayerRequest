@@ -16,10 +16,6 @@ struct UserInfoScreen: View {
     @State var prayerMessagesAreShowing = false
     @State var prayer: PrayerModel?
     
-    //User Model, with Name, Image, [Friends], [Prayers], Prayers Count
-    
-    //Need Manage Friend Button, Add Friend Button
-    
     let user: UserModel? = nil
     
     var body: some View {

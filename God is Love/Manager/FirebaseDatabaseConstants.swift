@@ -28,6 +28,16 @@ enum Collection{
        }
    }
     
+    var collectionReference: CollectionReference{
+        let db = Firebase.Firestore.firestore()
+        switch self{
+        case .PrayerCollection(_):
+            return db.collection("Prayers")
+        case .UserCollection(_):
+            return db.collection("Users")
+        }
+    }
+    
     enum UserDocument{
         private var db : CollectionReference{ return Firebase.Firestore.firestore().collection("Users") }
 

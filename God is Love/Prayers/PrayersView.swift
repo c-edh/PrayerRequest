@@ -32,7 +32,7 @@ struct PrayersView: View {
                 Button("Report"){
                     print("test")
                 }.foregroundColor(.blue).frame(maxWidth: .infinity,alignment: .trailing).padding([.top,.trailing,.leading]).buttonStyle(.bordered).shadow(radius: 1)
-                PrayerView(prayer: viewModel.getPrayer())
+                PrayerView(prayer: viewModel.prayer)
                     .padding()
                 
                 
@@ -50,6 +50,8 @@ struct PrayersView: View {
                 }
             // }
             
+        }.onAppear{
+            viewModel.getPrayersRequest()
         }
         
     }
@@ -106,11 +108,7 @@ struct PrayerAdvice:View{
                 
             }
             Button(action:{
-                if viewModel.prayers.peek() != nil{
-                    viewModel.userPray(encouragement)
-                    print("send button pressed")
-                }
-                
+                viewModel.userPray(encouragement)
                 isOpen.toggle()
                 
             }, label:{
@@ -185,11 +183,7 @@ struct NextAndPrayButton: View {
         HStack{
             Button(action: {
                 //Pop from the Stack
-                if viewModel.prayers.peek() != nil{
-                    viewModel.userSkip()
-                }
                 prayAdviceIsShowing.toggle()
-                
             }, label: {
                 Text("Send Message")
                     .foregroundColor(colorScheme == .dark ? .white : .black)
@@ -197,10 +191,7 @@ struct NextAndPrayButton: View {
             })
             Spacer()
             Button(action: {
-//                prayAdviceIsShowing.toggle()
-                viewModel.userPray(nil)
-                //Allow Prayer to Send a message to Requestor
-                
+                viewModel.userPray()
             }, label: {
                 Text("Pray")
                     .frame(width:100,height: 50)
@@ -230,7 +221,7 @@ struct OutOfPrayersView: View {
             Spacer()
             
         }.onAppear{
-            viewModel.getPrayersRequest(onlyFriends: false)
+            viewModel.getPrayersRequest()
             viewModel.getPrayer()
         }.frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height, alignment: .center).background(Color(UIColor(named: "backgroundColor")!))
     }

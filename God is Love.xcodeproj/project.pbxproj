@@ -111,6 +111,9 @@
 				F4B77B8428B9173100226F80 /* God is Love.entitlements */,
 				F41F602828B5D600008A4EBF /* God_is_LoveApp.swift */,
 				F4C7DF6329A281BD0070DD89 /* Manager */,
+				F4C7DF6629A2A0140070DD89 /* UserPrayers */,
+				F4C7DF6529A29FF00070DD89 /* PrayerRequest */,
+				F4C7DF6429A29FC80070DD89 /* Prayers */,
 				F4BC598D28BDB54800D16259 /* Model */,
 				F42F018628B70C7900BAAEC3 /* ViewModel */,
 				F41F603D28B5DBF2008A4EBF /* View */,
@@ -136,9 +139,6 @@
 			children = (
 				F4E598D328C1C1FC00226372 /* PhotoPicker.swift */,
 				F41F602A28B5D600008A4EBF /* ContentView.swift */,
-				F41F603B28B5DBEB008A4EBF /* PrayerRequestView.swift */,
-				F42F018728B70CB300BAAEC3 /* PrayersView.swift */,
-				F4B77B8728BC5D8D00226F80 /* UserInfoScreen.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -146,10 +146,7 @@
 		F42F018628B70C7900BAAEC3 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
-				F41F603E28B5E767008A4EBF /* PrayerRequestViewModel.swift */,
-				F42F018928B7254400BAAEC3 /* PrayersViewModel.swift */,
 				F4B77B8528B92BBA00226F80 /* LoginViewModel.swift */,
-				F4BC598B28BD159D00D16259 /* UserInfoScreenViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -158,7 +155,6 @@
 			isa = PBXGroup;
 			children = (
 				F461B41728CD9DE500C39149 /* machineLearningModel.mlmodel */,
-				F4BC598E28BDB56300D16259 /* PrayerModel.swift */,
 				F485B2F12979A3BC008106C8 /* UserModel.swift */,
 			);
 			path = Model;
@@ -171,6 +167,34 @@
 				F4DCE6632960C4D500496CAB /* FirebaseDatabaseConstants.swift */,
 			);
 			path = Manager;
+			sourceTree = "<group>";
+		};
+		F4C7DF6429A29FC80070DD89 /* Prayers */ = {
+			isa = PBXGroup;
+			children = (
+				F4BC598E28BDB56300D16259 /* PrayerModel.swift */,
+				F42F018928B7254400BAAEC3 /* PrayersViewModel.swift */,
+				F42F018728B70CB300BAAEC3 /* PrayersView.swift */,
+			);
+			path = Prayers;
+			sourceTree = "<group>";
+		};
+		F4C7DF6529A29FF00070DD89 /* PrayerRequest */ = {
+			isa = PBXGroup;
+			children = (
+				F41F603E28B5E767008A4EBF /* PrayerRequestViewModel.swift */,
+				F41F603B28B5DBEB008A4EBF /* PrayerRequestView.swift */,
+			);
+			path = PrayerRequest;
+			sourceTree = "<group>";
+		};
+		F4C7DF6629A2A0140070DD89 /* UserPrayers */ = {
+			isa = PBXGroup;
+			children = (
+				F4BC598B28BD159D00D16259 /* UserInfoScreenViewModel.swift */,
+				F4B77B8728BC5D8D00226F80 /* UserInfoScreen.swift */,
+			);
+			path = UserPrayers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

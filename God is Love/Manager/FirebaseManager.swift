@@ -175,39 +175,89 @@ class FirebaseManager: FirebaseManagerProtocol{
    
     
     func getPrayerRequest(completion: @escaping (Result<PrayerModel, FirebaseManagerError>) -> ()){
+//        guard let user = Auth.auth().currentUser else{
+//            return
+//        }
+//        db.collection("Prayers").limit(to: 10).whereField("UserID", isNotEqualTo: user.uid).getDocuments { (data, error) in
+//            if error != nil{
+//                print(error?.localizedDescription ?? "Error")
+//            }
+//
+//            guard let data = data else{
+//                completion(.failure(.incorrectData))
+//                return
+//            }
+//
+//            for document in data.documents{
+//
+//                self.getPrayerImage(id: document.documentID) { result in
+//                    var prayer = PrayerModel(prayerDocument: document)
+//
+//                    switch result {
+//                    case .success(let image):
+//                        prayer.addImage(image: image)
+//                        completion(.success(prayer))
+//
+//                    case .failure(let noImageError):
+//                        completion(.success(prayer))
+//
+//                        ////Most likely user has no Image for Prayer
+//                        print(noImageError.localizedDescription)
+//                    }
+//
+//                }
+//            }
+//        }
+    }
+    
+    
+    func getPrayerRequests(_ lastPrayer: DocumentSnapshot? =  nil, completion: @escaping (Result<[PrayerModel], FirebaseManagerError>)->Void){
         guard let user = Auth.auth().currentUser else{
             return
         }
-        db.collection("Prayers").whereField("UserID", isNotEqualTo: user.uid).getDocuments { (data, error) in
-            if error != nil{
-                print(error?.localizedDescription ?? "Error")
-            }
-            
-            guard let data = data else{
-                completion(.failure(.incorrectData))
-                return
-            }
-            
-            for document in data.documents{
+        if let lastPrayer = lastPrayer{
+            Collection.PrayerCollection().collectionReference.start(afterDocument: lastPrayer).limit(to: 10).whereField("UserID", isNotEqualTo: user.uid).getDocuments { data, error in
                 
-                self.getPrayerImage(id: document.documentID) { result in
-                    var prayer = PrayerModel(prayerDocument: document)
-                    
-                    switch result {
-                    case .success(let image):
-                        prayer.addImage(image: image)
-                        completion(.success(prayer))
-                        
-                    case .failure(let noImageError):
-                        completion(.success(prayer))
-                        
-                        ////Most likely user has no Image for Prayer
-                        print(noImageError.localizedDescription)
-                    }
-
+                if error != nil {
+                  //  completion(.failure(.firebaseError()))
+                    return
                 }
+                
+                guard let data = data else{
+                    completion(.failure(.noData))
+                    return
+                }
+                
+                var prayerArray: [PrayerModel] = []
+                for document in data.documents{
+                    prayerArray.append(PrayerModel(prayerDocument: document))
+                }
+                completion(.success(prayerArray))
             }
+            
+        }else{
+            Collection.PrayerCollection().collectionReference.limit(to: 10).whereField("UserID", isNotEqualTo: user.uid).getDocuments { data, error in
+                
+                if error != nil {
+                  //  completion(.failure(.firebaseError()))
+                    return
+                }
+                
+                guard let data = data else{
+                    completion(.failure(.noData))
+                    return
+                }
+                
+                var prayerArray: [PrayerModel] = []
+                for document in data.documents{
+                    prayerArray.append(PrayerModel(prayerDocument: document))
+                }
+                completion(.success(prayerArray))
+            }
+            
         }
+        
+        
     }
     
     
