@@ -11,8 +11,8 @@ struct PrayersView: View {
     
     @StateObject var viewModel = PrayersViewModel()
     @State var prayAdviceIsShowing = false
-    @State private var profileImage:UIImage?
-    
+    @Environment(\.colorScheme) private var colorScheme
+
     
     var body: some View {
         ZStack{
@@ -23,31 +23,32 @@ struct PrayersView: View {
                 .blur(radius: 25)
                 .offset(x: 500, y:-6)
             
-            if viewModel.getPrayer() == nil{
+            //            if viewModel.getPrayer() == nil{
+            //
+            //                OutOfPrayersView(viewModel: viewModel)
+            //
+            //            }else{
+            VStack{
+                Button("Report"){
+                    print("test")
+                }.foregroundColor(.blue).frame(maxWidth: .infinity,alignment: .trailing).padding([.top,.trailing,.leading]).buttonStyle(.bordered).shadow(radius: 1)
+                PrayerView(prayer: viewModel.getPrayer())
+                    .padding()
                 
-                OutOfPrayersView(viewModel: viewModel)
                 
-            }else{
-                VStack{
-                    PrayerView(prayer: viewModel.getPrayer())
-                        .padding()
-                        
-                    
-                    if prayAdviceIsShowing{
-                        PrayerAdvice(isOpen: $prayAdviceIsShowing,
-                                     viewModel: viewModel)
-                    }else{
-                        
-                        NextAndPrayButton(prayAdviceIsShowing: $prayAdviceIsShowing, viewModel: viewModel)
-                        Spacer()
-                            .frame(height: 25.0)
-                        
-                    }
-                    
-                }.frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
-                // .background(Color(UIColor(named: "backgroundColor")!))
                 
-            }
+                NextAndPrayButton(prayAdviceIsShowing: $prayAdviceIsShowing, viewModel: viewModel)
+                Spacer()
+                    .frame(height: 25.0)
+                
+            }.frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+                .sheet(isPresented: $prayAdviceIsShowing) {
+                    PrayerAdvice(isOpen: $prayAdviceIsShowing,
+                                 viewModel: viewModel) .presentationDetents([.medium, .fraction(0.3)])
+                        .background(colorScheme == .dark ? Color(hue: 1.0, saturation: 0.0, brightness: 0.6): Color(red: 0.995, green: 0.908, blue: 0.751))
+                      
+                }
+            // }
             
         }
         
@@ -64,8 +65,8 @@ struct PrayersView_Previews: PreviewProvider {
 struct PrayerAdvice:View{
     
     private enum Field: Int, CaseIterable {
-            case encouragement
-        }
+        case encouragement
+    }
     
     @State private var encouragement = ""
     @State private var textHintIsShowing = true
@@ -73,28 +74,34 @@ struct PrayerAdvice:View{
     @Binding var isOpen: Bool
     @FocusState  private var focusedField: Field?
     
+
+    
     var viewModel : PrayersViewModel
     
     var body: some View{
         VStack{
             Text("Message to the Person that needs the Prayer" )
-                .font(.system(size: 30))
+                .font(.system(size: 20))
                 .fontWeight(.semibold)
-                .foregroundColor(.blue)
+                .foregroundColor(.black)
             ZStack{
                 
                 TextEditor(text: $encouragement)
-                    .overlay(RoundedRectangle(cornerRadius: 16).stroke(.blue, lineWidth: 4)).padding()
+                // .overlay(RoundedRectangle(cornerRadius: 16).stroke(.black, lineWidth: 4))
+                    .clipShape(RoundedRectangle(cornerRadius: 16))
+                    .shadow(radius: 5)
+                    .padding()
                     .onTapGesture {
                         textHintIsShowing = false
                     }
                     .focused($focusedField, equals: .encouragement)
                 if textHintIsShowing{
-                    Text("Words of Encouragement").foregroundColor(.blue)
+                    Text("Words of Encouragement")
+                        .foregroundColor(Color(hue: 1.0, saturation: 0.0, brightness: 0.605))
                         .onTapGesture {
                             textHintIsShowing.toggle()
                         }
-                        
+                    
                 }
                 
             }
@@ -107,7 +114,11 @@ struct PrayerAdvice:View{
                 isOpen.toggle()
                 
             }, label:{
-                Text("Send").frame(width: 200, height: 50, alignment: .center).background(.blue).foregroundColor(.white).cornerRadius(16)
+                Text("Send").frame(width: 200, height: 50, alignment: .center)
+                    .background(.black)
+                    .foregroundColor(.white)
+                    .cornerRadius(16)
+                    .shadow(radius: 16)
             })
             .toolbar{
                 ToolbarItem(placement: .keyboard){
@@ -116,7 +127,7 @@ struct PrayerAdvice:View{
                     }
                 }
             }
-        }.padding().overlay(RoundedRectangle(cornerRadius: 16).stroke(.blue, lineWidth: 4))
+        }.padding()
     }
 }
 
@@ -168,7 +179,8 @@ struct NextAndPrayButton: View {
     
     @Binding var prayAdviceIsShowing: Bool
     @State   var viewModel: PrayersViewModel
-    
+    @Environment(\.colorScheme) private var colorScheme
+
     var body: some View {
         HStack{
             Button(action: {
@@ -176,20 +188,23 @@ struct NextAndPrayButton: View {
                 if viewModel.prayers.peek() != nil{
                     viewModel.userSkip()
                 }
-                
+                prayAdviceIsShowing.toggle()
                 
             }, label: {
-                Text("Next")
+                Text("Send Message")
+                    .foregroundColor(colorScheme == .dark ? .white : .black)
+                    .fontWeight(.bold)
             })
             Spacer()
             Button(action: {
-                prayAdviceIsShowing.toggle()
+//                prayAdviceIsShowing.toggle()
+                viewModel.userPray(nil)
                 //Allow Prayer to Send a message to Requestor
                 
             }, label: {
                 Text("Pray")
                     .frame(width:100,height: 50)
-                    .background(.blue).foregroundColor(.white)
+                    .background(.black).foregroundColor(.white)
                     .cornerRadius(16)
             })
         }.font(.system(size: 20).bold()).padding(30)
@@ -215,7 +230,7 @@ struct OutOfPrayersView: View {
             Spacer()
             
         }.onAppear{
-            viewModel.getPrayersRequest()
+            viewModel.getPrayersRequest(onlyFriends: false)
             viewModel.getPrayer()
         }.frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height, alignment: .center).background(Color(UIColor(named: "backgroundColor")!))
     }

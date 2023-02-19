@@ -5,7 +5,7 @@
 //  Created by Corey Edh on 8/29/22.
 //
 
-import FirebaseFirestore
+import FirebaseFirestore.FIRDocumentSnapshot
 import UIKit.UIImage
 
 struct PrayerModel:Identifiable{
@@ -25,7 +25,7 @@ struct PrayerModel:Identifiable{
         
         self.id = UUID()
         self.docID = prayerDocument.documentID
-        self.name = prayerDocument.get("Name") as? String ?? "No name"
+        self.name = prayerDocument.get("Name") as? String ?? "No Name"
         self.userID = prayerDocument.get("UserID") as? String ?? "N/A"
         self.prayer = prayerDocument.get("Prayer Request") as? String ?? "No Prayer"
         self.date = prayerDocument.get("Date") as? String ?? "N/A"

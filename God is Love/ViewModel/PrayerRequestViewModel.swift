@@ -8,11 +8,27 @@
 import UIKit
 import NaturalLanguage
 
+enum MachineLearningPredictions: String{
+    case depression = "Depression"
+    case sucidial = "Suicidal"
+}
+
 class PrayerRequestViewModel: ObservableObject{
+    @Published var messageIsSuicidal = false{
+        didSet{
+            if messageIsSuicidal == true{
+                messageIsDepression = false
+            }
+        }
+    }
     
-    
-    @Published var messageIsSuicidal = false
-    @Published var messageIsDepression = false
+    @Published var messageIsDepression = false{
+        didSet{
+            if messageIsDepression == true{
+                messageIsSuicidal = false
+            }
+        }
+    }
     
     private let firebaseManager = FirebaseManager()
 
@@ -20,39 +36,37 @@ class PrayerRequestViewModel: ObservableObject{
         let date = getTimeStamp()["Date"]
         
         suicidalDepressionDetection(prayerRequest)
-        firebaseManager.addPrayerToFireBase(name: name, prayerRequest: prayerRequest, date: date, prayerImage: prayerImage)
+        let prayerRequestInfo = [ "Name" : name ?? "Anonymous", "Prayer Request" : prayerRequest, "Date": date ?? "N/A"]
+        
+        firebaseManager.addPrayerToFireBase(prayerRequestInfo, prayerImage: prayerImage)
     }
 
-    
     private func suicidalDepressionDetection(_ message: String){
         do{
             let moodDector = try NLModel(mlModel: machineLearningModel().model)
+            
             guard let prediction = moodDector.predictedLabel(for: message) else{
                 print("couldn't predict")
                 return
             }
             
-            //
-            if prediction == "Suicidal"{
+            if prediction == MachineLearningPredictions.sucidial.rawValue{
                 messageIsSuicidal = true
-                messageIsDepression = false
-                print("Suicide detected")
-            }else if prediction == "Depression"{
+                print(MachineLearningPredictions.sucidial)
+            }else if prediction == MachineLearningPredictions.depression.rawValue{
                 messageIsDepression = true
-                messageIsSuicidal = false
-                print("depression detected")
+                print(MachineLearningPredictions.depression)
             }else{
+                messageIsSuicidal = false
+                messageIsDepression = false
                 print("Normal Message, no suicidal or depression detected")
             }
-            
             
         } catch{
             fatalError("No to load a part in NL model")
         }
         
     }
-    
-    
     
     private func getTimeStamp() -> [String:String]{
         let date = Date()
@@ -64,8 +78,4 @@ class PrayerRequestViewModel: ObservableObject{
         return ["Date": tripDate, "Time": timeString]
         
     }
-    
-    
-    
-    
 }

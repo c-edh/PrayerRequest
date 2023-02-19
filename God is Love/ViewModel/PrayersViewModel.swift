@@ -10,39 +10,30 @@ import Foundation
 class PrayersViewModel: ObservableObject{
     
     @Published var prayers = PrayerStack()
-    @Published var hasImage = false
-   // @Published var PrayerImage : [String:UIImage] = [:]
         
-    let firebaseManager = FirebaseManager()
+    let firebaseManager = FirebaseManager.shared
     
     
     //This was change
     func getPrayer() -> PrayerModel?{
-        
         guard let prayer = prayers.peek() else{
             return nil
         }
         return prayer
     }
     
-    func getPrayersRequest(){
-        
-        firebaseManager.getPrayerRequest { prayer in
-            self.prayers.push(prayer)
-        }
-        
-        
+    func getPrayersRequest(onlyFriends: Bool){
+
     }
     
     
-    func userPray(_ message: String){
+    func userPray(_ message: String?){
         guard let id = prayers.peek()?.docID, let prayerCount = prayers.peek()?.prayerCount, let date = getTimeStamp()["Date"] else{
             return
         }
         let count = prayerCount + 1
-        
+
         firebaseManager.userPrayForPrayer(with: id, message: message, date: date, prayerCount: count)
-        
         prayers.pop()
     }
     
@@ -51,10 +42,9 @@ class PrayersViewModel: ObservableObject{
         guard let prayer = prayers.peek() else{
             return
         }
-        
         let count = prayer.nextCount - 1
         
-        firebaseManager.prayerSkip(count: count, prayer: prayer)
+//        firebaseManager.prayerSkip(count: count, prayer: prayer)
         
         prayers.pop()
     }

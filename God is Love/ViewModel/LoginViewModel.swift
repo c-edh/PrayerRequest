@@ -14,7 +14,7 @@ class LoginViewModel: ObservableObject{
     @Published var nonce = ""
     @Published var login = false
     
-    let firebaseManager = FirebaseManager()
+    private let firebaseManager = FirebaseManager.shared
     
     func authenticate(credential: ASAuthorizationAppleIDCredential){
         guard let token = credential.identityToken else{
@@ -27,13 +27,28 @@ class LoginViewModel: ObservableObject{
             return
         }
 
-        firebaseManager.firebaseCredential(idToken: tokenString, nonce: nonce){isLogin in
-            self.login = isLogin
+        firebaseManager.firebaseCredential(idToken: tokenString, nonce: nonce){ [weak self] result in
+            switch result {
+            case .success(let success):
+                DispatchQueue.main.async {
+                    self?.login = success
+                }
+                
+            case .failure(let failure):
+                print(failure)
+            }
         }
+        
+        firebaseManager.setUpUser(userInfo: ["Name": "", "FriendsCount": 0, "Image": "", "PrayerCount": 0])
     }
     
+    
+
+    
     func logOut(){
-        self.login = firebaseManager.logOutFromFirebase()
+        DispatchQueue.main.async {
+            self.login = self.firebaseManager.logOutFromFirebase()
+        }
     }
     
 }

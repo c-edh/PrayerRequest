@@ -8,56 +8,60 @@
 import SwiftUI
 
 struct UserInfoScreen: View {
-    @StateObject var viewModel = UserInfoScreenViewModel()
-    @State private var prayerMessageIsShowing = false
-    @State var prayerMessage : [String] = []
-    @State var prayer = ""
     
+    private let screenWidth = UIScreen.main.bounds.width
+    private let screenHeight = UIScreen.main.bounds.height
+    
+    @StateObject var viewModel = UserInfoScreenViewModel()
+    @State var prayerMessagesAreShowing = false
+    @State var prayer: PrayerModel?
+    
+    //User Model, with Name, Image, [Friends], [Prayers], Prayers Count
+    
+    //Need Manage Friend Button, Add Friend Button
+    
+    let user: UserModel? = nil
     
     var body: some View {
         ZStack{
             
             Image("backgroundCross.png")
                 .resizable().aspectRatio(contentMode: .fill)
-                .frame(width:UIScreen.main.bounds.height,
-                       height:UIScreen.main.bounds.height)
+                .frame(width:screenWidth,
+                       height:screenHeight)
                 .blur(radius: 25)
                 .offset(x: 500, y:-6)
-            
             VStack{
-       
-                Text("Your Prayers Request").font(.system(size: 35)).fontWeight(.heavy).padding(.top,75)
-                    .onAppear{
-                        viewModel.getUserPrayerRequest()
-                    }
 
-                    List{
-                        ForEach(viewModel.userPrayers){ prayer in
-                            VStack{
-                                UserPrayers(prayer: prayer)
-                                    .onTapGesture {
-                                        
-                                        self.prayer = prayer.prayer
-                                        
-                                        viewModel.getPrayerMessages(with: prayer.docID)
-                                        prayerMessageIsShowing = true
-                                    }
-                                
-                            }
+            HStack(spacing: 50){
+                Text("Prayers Requested: \(user?.prayerCount ?? 0)")
+                Text("Prayers Prayed for: \(user?.prayerCount ?? 0)")
+                
+            }.frame(height: 100)
+                ListOfUserPrayers(prayers: viewModel.userPrayers, prayer: $prayer, prayerMessagesAreShowing: $prayerMessagesAreShowing)
+                
+                    .onAppear{
+                        Task{
+                           await viewModel.getUserPrayerRequest()
                             
                         }
+                    }
+                
+                    .sheet(isPresented: $prayerMessagesAreShowing) {
                         
-                    }.frame(width: UIScreen.main.bounds.width).listRowBackground(Color.clear)
+                        PrayerMessageView(prayerMessages: viewModel.messageForPrayer,
+                                          prayer: prayer?.prayer ?? "")
+                        
+                    }
                 
-                // .overlay(Divider().background(.blue), alignment: .top)
-                
-            }//.background(Color(UIColor(named: "backgroundColor")!))
+            }.padding([.top])
+            
+                .navigationTitle("Your Prayers")
             
         }
-            .sheet(isPresented: $prayerMessageIsShowing) {
-                PrayerMessageView(prayerMessages: viewModel.messageForPrayer, prayer: prayer)
-            }
+        
     }
+    
 }
 
 struct UserInfoScreen_Previews: PreviewProvider {
@@ -67,10 +71,39 @@ struct UserInfoScreen_Previews: PreviewProvider {
     }
 }
 
+
+struct ListOfUserPrayers: View {
+    
+    let prayers: [PrayerModel]
+
+    @Binding var prayer: PrayerModel?
+    @Binding var prayerMessagesAreShowing : Bool
+        
+    var body: some View {
+        VStack{
+            ScrollView{
+                ForEach(prayers){ prayer in
+                    VStack{
+                        UserPrayers(prayer: prayer)
+                            .onTapGesture {
+
+                                self.prayer = prayer
+                                prayerMessagesAreShowing = true
+                            }
+                            .background(.black)
+                        
+                    }
+                }
+                
+            }.frame(width: UIScreen.main.bounds.width).listRowBackground(Color.clear)
+
+        }.padding([.top])
+    }
+}
+
+
 struct UserPrayers: View {
     @State var prayer: PrayerModel
-    
-    var defaultImage = UIImage(systemName: "photo")!
     
     var body: some View {
         HStack{
@@ -101,39 +134,52 @@ struct UserPrayers: View {
 }
 
 struct PrayerMessageView: View {
+    let screenWidth = UIScreen.main.bounds.width
+    let screenHeight = UIScreen.main.bounds.height
     
     var prayerMessages : [String]
     var prayer: String
     
     var body: some View {
-        VStack{
-            Text(prayer)
-                .font(.system(size:40))
-                .fontWeight(.heavy)
-                .padding()
+        ZStack{
             
-            ScrollView{
-                ForEach(prayerMessages, id:\.self){ message in
-                    VStack{
-                        Text(message)
-                            .font(.system(size: 24))
-                            .fontWeight(.heavy).padding()
-                        
-                        Button(action:{
-                            //Report User comments
-                        }){
-                            Text("Report")
-                                .padding()
-                                .frame(width: UIScreen.main.bounds.width-20,alignment: .trailing)
-                        }
-                        
-                    }.background()
-                        .frame(width: UIScreen.main.bounds.width-20, alignment: .trailing)
-                        .cornerRadius(16).overlay(RoundedRectangle(cornerRadius: 16)
-                            .stroke(lineWidth: 4)).padding(3).shadow(radius: 4)
-                }
-            }.frame(width:UIScreen.main.bounds.width)
-        }.background()
+            Image("backgroundCross.png")
+                .resizable().aspectRatio(contentMode: .fill)
+                .frame(width:screenWidth,
+                       height:screenHeight)
+                .blur(radius: 25)
+                .offset(x: 500, y:-6)
+            VStack{
+                Text(prayer)
+                    .font(.system(size:40))
+                    .fontWeight(.heavy)
+                    .padding()
+                
+                ScrollView{
+                    ForEach(prayerMessages, id:\.self){ message in
+                        VStack{
+                            Text(message)
+                                .font(.system(size: 24))
+                                .fontWeight(.heavy).padding()
+                            
+                            Button(action:{
+                                //Report User comments
+                            }){
+                                Text("Report")
+                                    .padding()
+                                    .frame(width: UIScreen.main.bounds.width-20,alignment: .trailing)
+                            }
+                            
+                        }.background()
+                            .frame(width: UIScreen.main.bounds.width-20, alignment: .trailing)
+                            .cornerRadius(16).overlay(RoundedRectangle(cornerRadius: 16)
+                                .stroke(lineWidth: 4)).padding(3).shadow(radius: 4)
+                    }
+                }.frame(width:UIScreen.main.bounds.width)
+            }
+            
+        }
         
     }
 }
+

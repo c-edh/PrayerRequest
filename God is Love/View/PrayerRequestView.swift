@@ -9,15 +9,22 @@ import SwiftUI
 
 struct PrayerRequestView: View {
     
-    @State private var prayerInfo: String = ""
-    @State private var name = ""
-    @State private var prayerImage: UIImage?
-    @State private var userSelectedImage = false
-    @State private var isShowingImagePhotoPicker = false
+
     //  @State private var dismissMessage = false
     
+    @State var friendsOnly: Bool = false {
+        willSet{
+            if newValue{
+                navigationTitleText = "To Everyone"
+            }else{
+                navigationTitleText = "To Friends"
+            }
+        }
+    }
     
-    @StateObject var viewModel = PrayerRequestViewModel()
+    @State var navigationTitleText = ""
+    @State var showRequest: Bool = true
+
  
     
     var body: some View {
@@ -28,94 +35,49 @@ struct PrayerRequestView: View {
                        height:UIScreen.main.bounds.height)
                 .blur(radius: 25)
                 .offset(x: 500, y:-6)
-        
-            VStack{
-                
-                if viewModel.messageIsSuicidal{
-                    SuicidalHelpView()
-                }else{
-                    Spacer()
-                    
-                    
-                    if userSelectedImage{
+            if showRequest == true{
+                VStack{
+                    Text("Who do you want to Pray for you?")
+                        .padding()
+                        .frame(maxWidth: UIScreen.main.bounds.width)
+                        .font(.system(size: 40))
+                    Button {
+                        friendsOnly = true
+                        showRequest = false
                         
-                        Image(uiImage:prayerImage ?? UIImage(named: "photo")!)
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: 200)
-                            .cornerRadius(100)
-                            .shadow(radius: 16)
-                            .padding(.bottom)
+                    } label: {
+                        Text("Everyone")
+                            .padding()
+                            .frame(width:120,height:50)
+                            .background(.black)
+                            .foregroundColor(.white)
+                            .cornerRadius(10)
+                    }.padding()
+                      
+                    Button {
+                        //
+                        friendsOnly = true
+                        showRequest = true
                         
+                    } label: {
+                        Text("Friends")
+                            .padding()
+                            .frame(width:120,height:50)
+                            .background(.black)
+                            .foregroundColor(.white)
+                            .cornerRadius(10)
                     }
-                    
-                    
-                    Text("Prayer Request")
-                        .font(.title)
-                        .fontWeight(.heavy)
-                        //.foregroundColor()
-                    
-                    
-                    NameFieldView(name: $name)
-                        .padding()
-                        .frame(width: UIScreen.main.bounds.width)
-                    
-                    PrayerRequestFieldView(prayerInfo: $prayerInfo)
-                        .padding()
-                        .frame(width: UIScreen.main.bounds.width)
-                    
-                    Button(
-                        
-                        action:{
-                            if userSelectedImage != true{
-                                isShowingImagePhotoPicker = true
-                                
-                            }else{
-                                userSelectedImage = false
-                            }
-                        },
-                        
-                        label:{
-                            Text(userSelectedImage ? "Remove Image" : "Add Image")
-                                .frame(width:100,height:50)
-                                .background(.blue)
-                                .foregroundColor(.white)
-                                .cornerRadius(10)
-                                .padding(.bottom,50)
-                        }
-                    )
-                    
-                    
-                    Button(
-                        action:{
-                            
-                            viewModel.getUserPrayerRequest(name: name, prayerRequest: prayerInfo, prayerImage: prayerImage)
-//                            viewModel.uploadPrayerRequest(name: name,
-//                                                          prayerRequest: prayerInfo,
-//                                                          prayerImage: prayerImage)
-                            
-                            
-                        },
-                        label: {
-                            Text("Send Prayer Request")
-                                .frame(width: 170, height: 20, alignment: .center)
-                                .padding()
-                                .background(.blue)
-                                .foregroundColor(.white)
-                                .cornerRadius(10)
-                        }
-                    )
-                    
-                    Spacer()}
+                   
+                    .navigationTitle(navigationTitleText)
+                }
+                
+            } else{
+                GetPrayerRequestView(from: friendsOnly)
             }
             
             
         }.padding().background(Color(UIColor(named: "backgroundColor")!))
-            .sheet(isPresented: $isShowingImagePhotoPicker, content: {
-                PhotoPicker(profileImage: $prayerImage, userSelectedImage: $userSelectedImage)
-                    .shadow(radius: 16)
-                
-            })
+            
     }
 }
 
@@ -128,12 +90,14 @@ struct PrayerRequestView_Previews: PreviewProvider {
 struct NameFieldView: View {
     
     @Binding var name: String
+    @Binding var isFocus: Bool
     
     var body: some View {
         HStack{
             Text("For:")
                 .font(.system(size: 22))
                 .fontWeight(.bold)
+                .shadow(radius: 16)
                 .padding(16)
             
             TextField("Anonymous",text:$name)
@@ -141,8 +105,6 @@ struct NameFieldView: View {
                 .frame(height: 50)
                 .background(.black)
                 .foregroundColor(.white).cornerRadius(16)
-                .overlay(RoundedRectangle(cornerRadius: 16)
-                    .stroke(lineWidth: 4))
         }
     }
 }
@@ -164,24 +126,23 @@ struct PrayerRequestFieldView: View {
             Text("Prayer:")
                 .font(.system(size: 22))
                 .fontWeight(.bold)
+                .shadow(radius: 16)
             
             ZStack{
-                
+             
                 TextEditor(text: $prayerInfo)
+                    .scrollContentBackground(.hidden) // <- Hide it
+                    .background(.black) // To see this
                     .font(.system(size:20))
-                    .padding()
                     .frame(height: 50)
-                    .background(.black)  // light mode black todo, darkmode white
                     .foregroundColor(.white)
-                    .cornerRadius(16)
-//                    .overlay(RoundedRectangle(cornerRadius: 16)
-//                        .stroke(lineWidth: 4).opacity(0)
-//
-//                    )
+                    .clipShape(RoundedRectangle(cornerRadius: 16))
+                    .keyboardType(.asciiCapable)
+                    
                 
-                Text(text).background(.black)
-                    .opacity(0)
-                    .padding(.all,8)
+//                Text(text).background(.black)
+//                    .opacity(0)
+//                    .padding(.all,8)
                 
             }
             
@@ -200,7 +161,7 @@ struct SuicidalHelpView: View {
         ["\"Have I not commanded you? Be strong and courageous. Do not be frightened, and do not be dismayed, for the Lord your God is with you wherever you go.\"","Joshua 1:9"]
     ]
     
-    private let personalHiddenEmail = "revises_billow07@icloud.com"
+    //private let personalHiddenEmail = "revises_billow07@icloud.com"
     
     var body: some View {
         VStack{
@@ -226,34 +187,154 @@ struct SuicidalHelpView: View {
                     }
                     
                 }}
-            
-          
-            
-            
-           
-            
-            
-           
-            
-            
-       
-            
-            VStack{
-                Text("No luck with the hotline? My Email:")
-                
-                Button(action: {
-                    //Email me
-                }, label: {
-                    Text(personalHiddenEmail)
-                })
-                
-            }.font(.system(size: 20)).padding([.bottom,.top], 10)
-            
-      
-            
-            
-           
+
             
         }.padding().frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+    }
+}
+
+struct GetPrayerRequestView: View {
+    
+    @StateObject var viewModel = PrayerRequestViewModel()
+    @State private var prayerInfo: String = ""
+    @State private var name = ""
+    @State private var prayerImage: UIImage?
+    @State private var userSelectedImage = true
+    @State private var isShowingImagePhotoPicker = false
+    @State private var nameisFocus = false
+    @State private var prayIsFocus = false
+    @Environment(\.colorScheme) var colorScheme
+    @Environment(\.dismiss) var dismiss
+    let from: Bool
+
+    var body: some View {
+        VStack{
+            
+            if viewModel.messageIsSuicidal{
+                SuicidalHelpView()
+            }else{
+                Spacer()
+                
+                
+       
+                ZStack{
+                
+                    
+                    if prayerImage == nil{
+                        
+                        Image(systemName: "photo")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 200)
+                            .clipShape(Circle())
+                            .overlay(content: {
+                                Circle()
+                                    .stroke(lineWidth: 3)
+                                    .shadow(radius: 16)
+                            })
+                            .padding(.bottom)
+                            .onTapGesture {
+                                isShowingImagePhotoPicker = true
+                            }
+                        Image(systemName: "plus.circle")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .colorInvert()
+                            .frame(width: 50)
+                            .shadow(radius: 16)
+                        .offset(x:40, y: 50)
+                        .onTapGesture {
+                            isShowingImagePhotoPicker = true
+                        }
+                        
+                    }else{
+                            
+                        Image(uiImage:(prayerImage!))
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 200)
+                                .clipShape(Circle())
+                                .overlay(content: {
+                                    Circle()
+                                        .stroke(lineWidth: 3)
+                                        .shadow(radius: 16)
+                                })
+                                .padding(.bottom)
+                                .onTapGesture {
+                                    isShowingImagePhotoPicker = true
+                                }
+                                  
+                        Image(systemName: "minus.circle")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .foregroundColor(.red)
+                            .frame(width: 50)
+                            .shadow(radius: 16)
+                        .offset(x:60, y: 70)
+                        .onTapGesture {
+                            prayerImage = nil
+                        }
+                    }
+                    
+                }
+                    
+                
+                
+                
+                Text("Prayer Request")
+                    .font(.title)
+                    .fontWeight(.heavy)
+                    .shadow(radius: 16)
+                
+                
+                NameFieldView(name: $name, isFocus: $nameisFocus)
+                    .padding()
+                    .frame(width: UIScreen.main.bounds.width)
+                
+                PrayerRequestFieldView(prayerInfo: $prayerInfo)
+                    .padding()
+                    .frame(width: UIScreen.main.bounds.width)
+                
+
+                Spacer()
+                Button(
+                    action:{
+                        
+                        viewModel.getUserPrayerRequest(name: name, prayerRequest: prayerInfo, prayerImage: prayerImage)
+                        
+                        Alert(title: Text("Success"), message: Text("Your Prayer was Uploaded"), dismissButton: .default(Text("Ok"), action: {
+                            dismiss()
+                        }))
+                        
+                   
+                        
+                        
+                    },
+                    label: {
+                        Text("Submit")
+                            .frame(width: 100, height: 20, alignment: .center)
+                            .padding()
+                            .background(.black)
+                            .foregroundColor(.white)
+                            
+                            
+                            .cornerRadius(10)
+                    }
+                )
+                
+                Spacer()
+                
+            }
+            
+        }
+        .onTapGesture {
+            nameisFocus = false
+            prayIsFocus = false
+        }
+        .sheet(isPresented: $isShowingImagePhotoPicker, content: {
+            PhotoPicker(profileImage: $prayerImage, userSelectedImage: $userSelectedImage)
+                .shadow(radius: 16)
+            
+        })
     }
 }
