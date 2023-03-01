@@ -107,7 +107,6 @@ struct UserPrayers: View {
                 HStack{
                     Text("Prayer")
                     Text(prayer.date) //prayer.date
-                    
                 }
                 
                 Text(prayer.prayer) //prayer.prayer

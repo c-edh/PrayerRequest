@@ -25,12 +25,20 @@ class UserInfoScreenViewModel: ObservableObject{
     }
  
     func getUserPrayerRequest() async{
-        
-        firebaseManager.getUserPrayerRequest { result in
+        guard let user = Auth.auth().currentUser else{
+            return
+        }
+        let reference = Collection.UserDocument.Prayer(user, documentID: nil).userCollectionReference
+        firebaseManager.getFirebaseDataInCollection(for: reference,allowUserData: true){ result in
             switch result {
-            
-            case .success(let prayer):
-                self.userPrayers.append(prayer)
+            case .success(let prayers):
+                var prayerArray: [PrayerModel] = []
+                for prayer in prayers{
+                    print(prayer)
+                    prayerArray.append(.init(prayer: prayer))
+                }
+                print(prayerArray)
+                self.userPrayers = prayerArray
             
             case .failure(let failure):
                 print(failure)
@@ -55,7 +63,7 @@ class UserInfoScreenViewModel: ObservableObject{
     }
     
     func addFriend(){
-        firebaseManager.addFriends(friendsID: "afdakflTestklfakalf")
+      //  firebaseManager.addFriends(friendsID: "afdakflTestklfakalf")
     }
     
 }

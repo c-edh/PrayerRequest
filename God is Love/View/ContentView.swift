@@ -27,16 +27,14 @@ struct ContentView: View {
                 VStack{
                     Spacer()
                     
-                    Text("The\nWatchful Heart")
+                    Text("James\n5:15-16")
                         .multilineTextAlignment(.center)
-                        .font(.largeTitle)
+                        .font(.system(size: 50))
                         .fontWeight(.heavy)
                        // .foregroundColor(.black)
-                        .shadow(radius: 16)
-                    
+                        .shadow(radius: 3)
                     
                     Spacer(minLength: 30)
-                    
                     
                     //Change back to true when done editing
                     if loginData.login == false{

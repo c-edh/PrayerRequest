@@ -32,13 +32,22 @@ class PrayerRequestViewModel: ObservableObject{
     
     private let firebaseManager = FirebaseManager()
 
-    func getUserPrayerRequest(name: String?, prayerRequest: String, prayerImage: UIImage?){
+    func addUserPrayerRequest(name: String?, prayerRequest: String, prayerImage: UIImage?){
         let date = getTimeStamp()["Date"]
         
         suicidalDepressionDetection(prayerRequest)
-        let prayerRequestInfo = [ "Name" : name ?? "Anonymous", "Prayer Request" : prayerRequest, "Date": date ?? "N/A"]
-        
-        firebaseManager.addPrayerToFireBase(prayerRequestInfo, prayerImage: prayerImage)
+        let prayerRequestInfo = ["Name" : name ?? "Anonymous",
+                                  "Prayer Request" : prayerRequest,
+                                  "Date": date ?? "N/A",
+                                  "Prayer Count": 0,
+                                  "Next Count": 0] as [String : Any]
+                
+        firebaseManager.addToFirebase(with: .PrayerCollection(), data: prayerRequestInfo) { [weak self] documentReference in
+            guard let prayerImage = prayerImage else{
+                return
+            }
+            self?.firebaseManager.addImageToFireBase(documentId: documentReference, image: prayerImage)
+        }
     }
 
     private func suicidalDepressionDetection(_ message: String){

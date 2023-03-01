@@ -76,8 +76,6 @@ struct PrayerAdvice:View{
     @Binding var isOpen: Bool
     @FocusState  private var focusedField: Field?
     
-
-    
     var viewModel : PrayersViewModel
     
     var body: some View{
@@ -89,7 +87,6 @@ struct PrayerAdvice:View{
             ZStack{
                 
                 TextEditor(text: $encouragement)
-                // .overlay(RoundedRectangle(cornerRadius: 16).stroke(.black, lineWidth: 4))
                     .clipShape(RoundedRectangle(cornerRadius: 16))
                     .shadow(radius: 5)
                     .padding()
@@ -103,7 +100,6 @@ struct PrayerAdvice:View{
                         .onTapGesture {
                             textHintIsShowing.toggle()
                         }
-                    
                 }
                 
             }
@@ -160,15 +156,10 @@ struct PrayerView: View {
             .frame(width: UIScreen.main.bounds.width, alignment: .leading)
             
             ScrollView{
-                
                 Text(prayer?.prayer ?? "No Prayer")
                     .font(.system(size: 35))
                     .fontWeight(.bold)
-                
             }
-            
-            
-            
         }
     }
 }

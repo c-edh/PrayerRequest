@@ -33,24 +33,27 @@ class LoginViewModel: ObservableObject{
                 DispatchQueue.main.async {
                     self?.login = success
                 }
-                
             case .failure(let failure):
                 print(failure)
             }
         }
         
-        firebaseManager.setUpUser(userInfo: ["Name": "", "FriendsCount": 0, "Image": "", "PrayerCount": 0])
     }
     
-    
-
+    func setUpAccount(name: String){
+        guard let user = Auth.auth().currentUser else{
+            print("No current user")
+            return
+        }
+        let data = ["Name": name, "FriendsCount": 0, "Image": "", "PrayerCount": 0] as [String: Any]
+        self.firebaseManager.addToFirebase(with: .UserCollection(.User(user)), data: data) { _ in }
+    }
     
     func logOut(){
         DispatchQueue.main.async {
             self.login = self.firebaseManager.logOutFromFirebase()
         }
     }
-    
 }
 
 

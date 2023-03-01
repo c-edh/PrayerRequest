@@ -10,36 +10,57 @@ import Firebase
 
 class PrayersViewModel: ObservableObject{
     
-    
-    let firebaseManager = FirebaseManager.shared
-    @Published var prayer: PrayerModel? = nil
+    @Published var prayer: PrayerModel? {
+        didSet{
+            firebaseManager.getFirebaseImage(id: prayer!.docID) {[weak self] result in
+                switch result {
+                case .success(let image):
+                    DispatchQueue.main.async {
+                        self?.prayer!.addImage(image: image)
+                    }
+                case .failure(_):
+                    print("no image")
+                }
+            }
+        }
+    }
     private var prayers : [PrayerModel] = []
     private var prayerIndex =  0
     
+    private let firebaseManager = FirebaseManager.shared
+   
     func getPrayer(){
-        if !prayers.isEmpty{
+        if prayerIndex < prayers.count{
             prayerIndex += 1
             let prayer = prayers[prayerIndex]
             self.prayer = prayer
-        } else if prayerIndex == prayers.count{
+        } else{
             let prayer = prayers[prayerIndex]
             self.prayer = prayer
-            getPrayersRequest(prayers.last?.snapShot)
+          //  getPrayersRequest(prayers.last?.snapShot)
             self.prayers = Array(prayers[11...prayers.count])
         }
+        print(prayerIndex)
+        print(prayers.count)
     }
     
-    func getPrayersRequest(_ lastPrayer: DocumentSnapshot? = nil){
-        print("this ran")
-        firebaseManager.getPrayerRequests(lastPrayer) { result in
-            switch result{
+    func getPrayersRequest(){
+        let reference = Collection.PrayerCollection().collectionReference
+        firebaseManager.getFirebaseDataInCollection(for: reference) { result in
+            switch result {
             case .success(let prayers):
-                self.prayers = prayers
+                var prayersArray: [PrayerModel] = []
+                for prayer in prayers{
+                    prayersArray.append(.init(prayer: prayer))
+                }
+                
+                self.prayers = prayersArray
                 DispatchQueue.main.async {
                     self.getPrayer()
                 }
-            case .failure(let error):
-                print(error.toString)
+                
+            case .failure(let failure):
+                print(failure)
             }
         }
     }
@@ -47,11 +68,19 @@ class PrayersViewModel: ObservableObject{
     
     func userPray(_ message: String? = nil){
         let prayer = prayers[prayerIndex]
-        guard let date = getTimeStamp()["Date"] else{
-            return
+        var data = ["Prayer Count": prayer.prayerCount + 1] as [String: Any]
+        
+        let location: Collection = .PrayerCollection(documentID: prayer.docID)
+
+        if let message, let date = getTimeStamp()["Date"]{
+            data["Message"] = message
+            data["Date"] = date
+            firebaseManager.updateDataInFirebase(at: location, data: data)
+
+        }else{
+            firebaseManager.updateDataInFirebase(at: location, data: data)
         }
-        let count = prayer.prayerCount + 1
-        firebaseManager.userPrayForPrayer(with: prayer.docID, message: message, date: date, prayerCount: count)
+        getPrayer()
     }
 
     private func getTimeStamp() -> [String:String]{

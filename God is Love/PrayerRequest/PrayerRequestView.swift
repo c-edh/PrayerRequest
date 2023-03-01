@@ -8,10 +8,7 @@
 import SwiftUI
 
 struct PrayerRequestView: View {
-    
-
     //  @State private var dismissMessage = false
-    
     @State var friendsOnly: Bool = false {
         willSet{
             if newValue{
@@ -24,8 +21,6 @@ struct PrayerRequestView: View {
     
     @State var navigationTitleText = ""
     @State var showRequest: Bool = true
-
- 
     
     var body: some View {
         ZStack{
@@ -67,15 +62,11 @@ struct PrayerRequestView: View {
                             .foregroundColor(.white)
                             .cornerRadius(10)
                     }
-                   
                     .navigationTitle(navigationTitleText)
                 }
-                
             } else{
                 GetPrayerRequestView(from: friendsOnly)
             }
-            
-            
         }.padding().background(Color(UIColor(named: "backgroundColor")!))
             
     }
@@ -109,17 +100,11 @@ struct NameFieldView: View {
     }
 }
 
-
-
-
 struct PrayerRequestFieldView: View {
     
     @Binding var prayerInfo: String
     
     @State private var text = ""
-    
-   
-    
     var body: some View {
         HStack{
             
@@ -138,11 +123,6 @@ struct PrayerRequestFieldView: View {
                     .foregroundColor(.white)
                     .clipShape(RoundedRectangle(cornerRadius: 16))
                     .keyboardType(.asciiCapable)
-                    
-                
-//                Text(text).background(.black)
-//                    .opacity(0)
-//                    .padding(.all,8)
                 
             }
             
@@ -160,8 +140,6 @@ struct SuicidalHelpView: View {
         ["\"Even though I walk through the valley of the shadow of death, I will fear no evil, for you are with me; your rod and your staff, they comfort me.\"","Psalm 23:4"],
         ["\"Have I not commanded you? Be strong and courageous. Do not be frightened, and do not be dismayed, for the Lord your God is with you wherever you go.\"","Joshua 1:9"]
     ]
-    
-    //private let personalHiddenEmail = "revises_billow07@icloud.com"
     
     var body: some View {
         VStack{
@@ -214,14 +192,8 @@ struct GetPrayerRequestView: View {
                 SuicidalHelpView()
             }else{
                 Spacer()
-                
-                
-       
                 ZStack{
-                
-                    
                     if prayerImage == nil{
-                        
                         Image(systemName: "photo")
                             .resizable()
                             .aspectRatio(contentMode: .fit)
@@ -248,7 +220,6 @@ struct GetPrayerRequestView: View {
                         }
                         
                     }else{
-                            
                         Image(uiImage:(prayerImage!))
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)
@@ -275,11 +246,7 @@ struct GetPrayerRequestView: View {
                             prayerImage = nil
                         }
                     }
-                    
                 }
-                    
-                
-                
                 
                 Text("Prayer Request")
                     .font(.title)
@@ -299,16 +266,11 @@ struct GetPrayerRequestView: View {
                 Spacer()
                 Button(
                     action:{
-                        
-                        viewModel.getUserPrayerRequest(name: name, prayerRequest: prayerInfo, prayerImage: prayerImage)
+                        viewModel.addUserPrayerRequest(name: name, prayerRequest: prayerInfo, prayerImage: prayerImage)
                         
                         Alert(title: Text("Success"), message: Text("Your Prayer was Uploaded"), dismissButton: .default(Text("Ok"), action: {
                             dismiss()
                         }))
-                        
-                   
-                        
-                        
                     },
                     label: {
                         Text("Submit")
