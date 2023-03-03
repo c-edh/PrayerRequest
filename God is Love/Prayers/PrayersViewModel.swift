@@ -76,10 +76,10 @@ class PrayersViewModel: ObservableObject{
             data["Message"] = message
             data["Date"] = date
             firebaseManager.updateDataInFirebase(at: location, data: data)
-
         }else{
             firebaseManager.updateDataInFirebase(at: location, data: data)
         }
+        
         getPrayer()
     }
 
@@ -90,9 +90,7 @@ class PrayersViewModel: ObservableObject{
         let tripDate = dateFormat.string(from: date)
         dateFormat.dateFormat = "HH:mm:ss"
         let timeString = dateFormat.string(from: date)
-        
         return ["Date": tripDate, "Time": timeString]
-        
     }
     
 }

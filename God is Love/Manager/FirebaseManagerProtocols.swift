@@ -7,17 +7,16 @@
 import FirebaseAuth
 import FirebaseFirestore.FIRDocumentSnapshot
 
-protocol FirebaseManagerProtocol: LoginProtocol, UserProtocol{
+protocol FirebaseManagerProtocol: AuthenticationProtocol, UploadDataProtocol, GetDataProtocol{
     static var shared: FirebaseManager { get }
 }
 
-protocol LoginProtocol{
+protocol AuthenticationProtocol{
     func firebaseCredential(idToken: String, nonce: String, loginCompletion: @escaping (Result<Bool,Error>)->())
-    func setUpUser(userInfo: [String: Any])
     func logOutFromFirebase() -> Bool
 }
 
-extension LoginProtocol{
+extension AuthenticationProtocol{
     func firebaseCredential(idToken: String, nonce: String, loginCompletion: @escaping (Result<Bool,Error>)->()){
         let credential = OAuthProvider.credential(withProviderID: "apple.com", idToken: idToken, rawNonce: nonce)
         Auth.auth().signIn(with: credential) { (result, error) in
@@ -42,7 +41,14 @@ extension LoginProtocol{
     }
 }
 
-protocol UserProtocol{
-    func getUserPrayerRequestMessages(for prayerID: String, completion: @escaping (Result<[String], FirebaseManagerError>) -> Void)
+protocol UploadDataProtocol{
+    func addToFirebase(with reference: Collection, data: [String: Any], completion: @escaping (_ documentReference: String) -> Void)
+    func updateDataInFirebase(at location: Collection, data: [String:Any])
+    func addImageToFireBase(documentId: String, image: UIImage)
 }
 
+protocol GetDataProtocol{
+    func getFirebaseDataInCollection(for reference: CollectionReference, allowUserData: Bool, limitAmount: Int, completion: @escaping (Result<[[String:Any]], FirebaseManagerError>) -> Void)
+    func getFirebaseDocumentData(for reference: Collection, completion: @escaping (Result<[String:Any], FirebaseManagerError>) -> Void)
+    func getFirebaseImage(id: String, completion: @escaping (Result<UIImage, FirebaseManagerError>) -> Void)
+}

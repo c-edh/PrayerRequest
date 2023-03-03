@@ -15,43 +15,49 @@ struct PrayersView: View {
 
     
     var body: some View {
-        ZStack{
-            Image("backgroundCross.png")
-                .resizable().aspectRatio(contentMode: .fill)
-                .frame(width:UIScreen.main.bounds.height,
-                       height:UIScreen.main.bounds.height)
-                .blur(radius: 25)
-                .offset(x: 500, y:-6)
+        NavigationStack{
+            ZStack{
+                Image("backgroundCross.png")
+                    .resizable().aspectRatio(contentMode: .fill)
+                    .frame(width:UIScreen.main.bounds.height,
+                           height:UIScreen.main.bounds.height)
+                    .blur(radius: 25)
+                    .offset(x: 500, y:-6)
+                
+                //            if viewModel.getPrayer() == nil{
+                //
+                //                OutOfPrayersView(viewModel: viewModel)
+                //
+                //            }else{
+                VStack{
+                    
+                    PrayerView(prayer: viewModel.prayer)
+                        .padding()
+                    
+                    
+                    
+                    NextAndPrayButton(prayAdviceIsShowing: $prayAdviceIsShowing, viewModel: viewModel)
+//                    Spacer()
+//                        .frame(height: 25.0)
+                    
+                }//.frame(maxWidth: .infinity, maxHeight: .infinity)
+                    
+                    .sheet(isPresented: $prayAdviceIsShowing) {
+                        PrayerAdvice(isOpen: $prayAdviceIsShowing,
+                                     viewModel: viewModel) .presentationDetents([.medium, .fraction(0.3)])
+                            .background(colorScheme == .dark ? Color(hue: 1.0, saturation: 0.0, brightness: 0.6): Color(red: 0.995, green: 0.908, blue: 0.751))
+                    }
+            }
+        }.onAppear{ viewModel.getPrayersRequest() }
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
             
-            //            if viewModel.getPrayer() == nil{
-            //
-            //                OutOfPrayersView(viewModel: viewModel)
-            //
-            //            }else{
-            VStack{
-                Button("Report"){
-                    print("test")
-                }.foregroundColor(.blue).frame(maxWidth: .infinity,alignment: .trailing).padding([.top,.trailing,.leading]).buttonStyle(.bordered).shadow(radius: 1)
-                PrayerView(prayer: viewModel.prayer)
-                    .padding()
+            Button("Report"){
                 
-                
-                
-                NextAndPrayButton(prayAdviceIsShowing: $prayAdviceIsShowing, viewModel: viewModel)
-                Spacer()
-                    .frame(height: 25.0)
-                
-            }.frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
-                .sheet(isPresented: $prayAdviceIsShowing) {
-                    PrayerAdvice(isOpen: $prayAdviceIsShowing,
-                                 viewModel: viewModel) .presentationDetents([.medium, .fraction(0.3)])
-                        .background(colorScheme == .dark ? Color(hue: 1.0, saturation: 0.0, brightness: 0.6): Color(red: 0.995, green: 0.908, blue: 0.751))
-                      
-                }
-            // }
+            }
             
-        }.onAppear{
-            viewModel.getPrayersRequest()
+        }
+           
         }
         
     }

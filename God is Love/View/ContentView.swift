@@ -7,17 +7,20 @@
 
 import SwiftUI
 import AuthenticationServices
-import CoreData
 
 struct ContentView: View {
     
-    
-    @State private var status = ""
     @StateObject var loginData = LoginViewModel()
+
+    @State private var status = ""
     
     var body: some View {
         
         NavigationView{
+            if loginData.login == true{
+                StartMenu()
+            }
+            else{
             ZStack{
                 Image("backgroundCross.png")
                     .resizable().aspectRatio(contentMode: .fill)
@@ -27,25 +30,16 @@ struct ContentView: View {
                 VStack{
                     Spacer()
                     
-                    Text("James\n5:15-16")
+                    Text("God is Love")
                         .multilineTextAlignment(.center)
                         .font(.system(size: 50))
                         .fontWeight(.heavy)
-                       // .foregroundColor(.black)
                         .shadow(radius: 3)
                     
                     Spacer(minLength: 30)
                     
                     //Change back to true when done editing
-                    if loginData.login == false{
-                        StartMenu(loginData: loginData)
-                            .padding()
-                            .background(.white.opacity(0.1))
-                            .cornerRadius(16).shadow(radius: 16)
-                        Spacer()
-                        
-                        
-                    }else{
+                 
                         Text(status).offset(y:-70)
                         
                         SignInWithAppleButton() { request in
@@ -55,7 +49,6 @@ struct ContentView: View {
                             
                         } onCompletion: { result in
                             switch result{
-                                
                             case .success(let user):
                                 //login with firebase...
                                 print("success")
@@ -68,16 +61,12 @@ struct ContentView: View {
                             case .failure(let error):
                                 status = "Login in Failed"
                                 print(error.localizedDescription)
-                                
                             }
                             
                         }.shadow(radius: 16).frame(width: 200, height: 50, alignment: .center)
                             .offset(y:-150)
-                        
-                        
                     }
                 }
-                
             }
         }
     }
@@ -94,51 +83,31 @@ struct ContentView_Previews: PreviewProvider {
 }
 
 struct StartMenu: View {
-    
-    var loginData : LoginViewModel
-    
     var body: some View {
-        
+    
         ZStack{
-            
-            VStack{
-                NavigationLink("Ask for Prayers", destination: PrayerRequestView())
-                    .frame(width: 200, height: 50, alignment: .center)
-                    .background(.black)
-                    .foregroundColor(.white)
-                    .cornerRadius(16)
-                    .padding(.bottom,25)
+            TabView {
                 
-                NavigationLink("Pray for Others", destination: PrayersView())
-                    .frame(width: 200, height: 50, alignment: .center)
-                    .background(.black)
-                    .foregroundColor(.white)
-                    .cornerRadius(16)
-
+                PrayerRequestView().tabItem {
+                    Label("Request", systemImage: "shift.fill")
+                }
                 
-                NavigationLink("Your Prayers", destination: UserInfoScreen())
-                    .frame(width: 200, height: 50, alignment: .center)
-                    .background(.black)
-                    .foregroundColor(.white)
-                    .cornerRadius(16)
-                    .padding(25)
+                PrayersView().padding()
+                    .tabItem {
+                        Label("Prayers", systemImage: "person.3.fill")
+                    }
                 
-                Button(action:{
-                    loginData.logOut()
-                }, label:{Text("Logout").frame(width: 100, height: 50, alignment: .center).background(.black).foregroundColor(.white).cornerRadius(16).padding()})
-                
-            }.shadow(radius: 16)
-            
-            NavigationLink(destination: {
                 UserInfoScreen()
-            }, label: {
-                Image(systemName: "person.fill")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 30)
-            }).offset(x:150,y:-500)
-
+                    .tabItem {
+                        Label("Profile", systemImage: "person.circle")
+                    }
+                
+            }
+            
+            
             
         }
-    }
+            
+        }
 }
+

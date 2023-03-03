@@ -15,47 +15,34 @@ class FirebaseManager: FirebaseManagerProtocol{
     
     //MARK: - User Authentication to Firebase
     func setUpUser(userInfo: [String:Any]){
-        guard let user = Auth.auth().currentUser else{
-            print("Didnt get user id")
-            return
-        }
+        guard let user = Auth.auth().currentUser else{ return }
         Collection.UserCollection(.User(user)).documentReference.setData(userInfo)
     }
+    
     //MARK: - Uploading to Firebase
     
     func addToFirebase(with reference: Collection, data: [String: Any], completion: @escaping (_ documentReference: String) -> Void){
-        guard let user = Auth.auth().currentUser else{
-            return
-        }
+        guard let user = Auth.auth().currentUser else{ return }
         
         var fireBaseData = data
         fireBaseData["UserID"] = user.uid
         
         reference.documentReference.setData(fireBaseData){ err in
-            if let err = err {
-                print("Error adding document: \(err)")
-            } else {
-                completion(reference.documentReference.documentID)
-            }
+            if let err = err { print("Error adding document: \(err)") }
+            else { completion(reference.documentReference.documentID) }
         }
     }
     
     func addImageToFireBase(documentId: String, image: UIImage){
         let storageRef = Storage.storage().reference().child("Prayers/\(documentId)")
-        guard let compressedImage = image.jpegData(compressionQuality: 0.75) else{
-            print("FAILED TO COMPRESS")
-            return
-        }
+        guard let compressedImage = image.jpegData(compressionQuality: 0.75) else{ return }
         
         let metaData = StorageMetadata()
         metaData.contentType = "image/jpg"
         
         storageRef.putData(compressedImage, metadata: metaData) { metaData, error in
-            if error == nil, metaData != nil{
-                print("Image stored sucessfully")
-            }else{
-                print("Upload fail")
-            }
+            if error == nil, metaData != nil{ print("Image stored sucessfully") }
+            else{ print("Upload fail") }
         }
     }
     
@@ -64,21 +51,17 @@ class FirebaseManager: FirebaseManagerProtocol{
     }
     
     //MARK: - Retrieving Data from Firebase
+    
     func getFirebaseDataInCollection(for reference: CollectionReference, allowUserData: Bool = false, limitAmount: Int = 10, completion: @escaping (Result<[[String:Any]], FirebaseManagerError>) -> Void){
-        guard let user = Auth.auth().currentUser else{
-            return
-        }
+        guard let user = Auth.auth().currentUser else{ return }
         
         var query = reference.limit(to: limitAmount)
         
-        if !allowUserData{
-            query = reference.limit(to: limitAmount).whereField("UserID", isNotEqualTo: user.uid )
-        }
+        if !allowUserData{ query = reference.limit(to: limitAmount).whereField("UserID", isNotEqualTo: user.uid ) }
         
         query.getDocuments { (collectionData, error) in
-            if let error {
-                completion(.failure(.firebaseError(error)))
-            }
+            if let error { completion(.failure(.firebaseError(error))) }
+            
             guard let collection = collectionData else{
                 completion(.failure(.noData))
                 return
@@ -91,12 +74,10 @@ class FirebaseManager: FirebaseManagerProtocol{
         }
     }
     
-    func getFirebaseDocumentData(for reference: Collection, completion: @escaping (Result<[String:Any], FirebaseManagerError>) -> ()){
+    func getFirebaseDocumentData(for reference: Collection, completion: @escaping (Result<[String:Any], FirebaseManagerError>) -> Void){
         reference.documentReference.getDocument { (document, error) in
-            if let error = error{
-                completion(.failure(.firebaseError(error)))
-                print(error.localizedDescription)
-            }else{
+            if let error = error{ completion(.failure(.firebaseError(error))) }
+            else{
                 guard let document = document, let data = document.data() else{
                     completion(.failure(.incorrectData))
                     return
@@ -110,10 +91,8 @@ class FirebaseManager: FirebaseManagerProtocol{
         let prayerStoredImageRef =  Storage.storage().reference().child("Prayers/\(id)")
         
         prayerStoredImageRef.getData(maxSize: 1*1024*1024) { data, error in
-            if let error = error{
-                print(error.localizedDescription, "Error has occured, default image is displayed")
-                completion(.failure(.firebaseError(error)))
-            }else{
+            if let error = error{ completion(.failure(.firebaseError(error))) }
+            else{
                 guard let data = data, let userStoredImage = UIImage(data: data) else{
                     completion(.failure(.incorrectData))
                     return
@@ -121,14 +100,12 @@ class FirebaseManager: FirebaseManagerProtocol{
                 completion(.success(userStoredImage))
             }
         }
-        
     }
     
     func getUserPrayerRequestMessages(for prayerID: String, completion: @escaping (Result<[String], FirebaseManagerError>) -> Void ){
         db.collection("Prayers").document(prayerID).getDocument { (data, error) in
-            if let error = error{
-                completion(.failure(.firebaseError(error)))
-            }
+            if let error = error{ completion(.failure(.firebaseError(error))) }
+            
             guard let data = data, let messages = data["Messages"] as? [[String:String]]  else{
                 completion(.failure(.incorrectData))
                 return
@@ -139,7 +116,6 @@ class FirebaseManager: FirebaseManagerProtocol{
             for message in messages {
                 messageArray.append(message["Message"] ?? "Message Error")
             }
-            
             completion(.success(messageArray))
         }
     }

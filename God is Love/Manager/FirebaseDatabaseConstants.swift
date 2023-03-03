@@ -69,7 +69,6 @@ enum Collection{
             }
         }
     }
- 
 }
 
 enum FirebaseManagerError: Error{
