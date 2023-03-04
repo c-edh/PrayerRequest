@@ -68,16 +68,17 @@ class PrayersViewModel: ObservableObject{
     
     func userPray(_ message: String? = nil){
         let prayer = prayers[prayerIndex]
+    
         var data = ["Prayer Count": prayer.prayerCount + 1] as [String: Any]
-        
-        let location: Collection = .PrayerCollection(documentID: prayer.docID)
+    
+        let reference = Collection.PrayerCollection(documentID: prayer.docID).documentReference
 
         if let message, let date = getTimeStamp()["Date"]{
             data["Message"] = message
             data["Date"] = date
-            firebaseManager.updateDataInFirebase(at: location, data: data)
+            firebaseManager.updateDataInFirebase(at: reference, data: data)
         }else{
-            firebaseManager.updateDataInFirebase(at: location, data: data)
+            firebaseManager.updateDataInFirebase(at: reference, data: data)
         }
         
         getPrayer()

@@ -13,44 +13,56 @@ struct UserInfoScreen: View {
     private let screenHeight = UIScreen.main.bounds.height
     
     @StateObject var viewModel = UserInfoScreenViewModel()
-    @State var prayerMessagesAreShowing = false
-    @State var prayer: PrayerModel?
     
-    let user: UserModel? = nil
     
     var body: some View {
         ZStack{
-            
             Image("backgroundCross.png")
                 .resizable().aspectRatio(contentMode: .fill)
                 .frame(width:screenWidth, height:screenHeight)
                 .blur(radius: 25)
                 .offset(x: 500, y:-6)
+            
             VStack{
-                
                 HStack{
-                    
                     VStack{
                         Image(systemName:"person.circle")
-                            .resizable().scaledToFit().frame(maxHeight: 100)
-                            
-                        Text("Hi Corey").font(.system(size: 20,weight: .bold))
-                    }.frame(maxHeight: .infinity,alignment: .bottom).padding([.leading])
+                            .resizable()
+                            .scaledToFit()
+                            .frame(maxHeight: 100)
+                        
+                        Text("Hi \(viewModel.user?.name ?? "")")
+                            .font(.system(size: 20,weight: .bold))
+                    }.frame(maxHeight: .infinity,alignment: .bottom)
+                        .padding([.leading])
+                   
                     Spacer()
-                    VStack{
-                        Text("You Requested: \(user?.prayerCount ?? 0)")
-                        Text("You Prayed for: \(user?.prayerCount ?? 0)")
-                    }.frame(maxHeight: .infinity,alignment: .bottom).padding([.trailing])
+                    
+                    Text("You Prayed for: \(viewModel.user?.prayerCount ?? 0)")
+                        .frame(maxWidth: .infinity,maxHeight: .infinity,alignment: .bottomTrailing)
               
-                }.frame(height: 200).frame(maxWidth: .infinity)
+                }.frame(height: 200).frame(maxWidth: .infinity).padding()
                 
-                ListOfUserPrayers(prayers: viewModel.userPrayers, prayer: $prayer, prayerMessagesAreShowing: $prayerMessagesAreShowing)
-                    .onAppear{ Task{ await viewModel.getUserPrayerRequest() } }
-                
-                    .sheet(isPresented: $prayerMessagesAreShowing) {
-                        PrayerMessageView(prayerMessages: viewModel.messageForPrayer,
-                                          prayer: prayer?.prayer ?? "")
-                    }
+                VStack(spacing:30){
+                    NavigationLink {
+                        VStack{
+                            Text("")
+                        }
+                    } label: {
+                        Text("Your Friends").foregroundColor(.white)
+                    }.padding()
+                        .frame(width: 200,height: 50)
+                        .background(.black)
+                        .clipShape(RoundedRectangle(cornerRadius: 16))
+                    
+                    NavigationLink {
+                        ListOfUserPrayers()
+                    } label: {
+                        Text("Your Request").foregroundColor(.white)
+                    }.frame(width: 200,height: 50).background(.black).clipShape(RoundedRectangle(cornerRadius: 16))
+                    
+                }.frame(maxHeight: .infinity,alignment: .top).padding()
+
             }.padding([.top])
             .navigationTitle("Your Prayers")
             .toolbar {
@@ -62,6 +74,9 @@ struct UserInfoScreen: View {
                     }
 
                 }
+            }
+            .onAppear{
+                viewModel.getUserData()
             }
         }
         
@@ -79,23 +94,29 @@ struct UserInfoScreen_Previews: PreviewProvider {
 
 struct ListOfUserPrayers: View {
     
-    let prayers: [PrayerModel]
-    
-    @Binding var prayer: PrayerModel?
-    @Binding var prayerMessagesAreShowing : Bool
+    @StateObject var viewModel = UserInfoScreenViewModel()
+
+    @State var prayer: PrayerModel?
+    @State var prayerMessagesAreShowing : Bool = false
     
     var body: some View {
         VStack{
             ScrollView{
-                ForEach(prayers){ prayer in
+                ForEach(viewModel.userPrayers){ prayer in
                     VStack{
-                        UserPrayers(prayer: prayer)
-                            .onTapGesture {
-                                self.prayer = prayer
-                                prayerMessagesAreShowing = true
-                            }
-                            .background(.black)
-                            .clipShape(RoundedRectangle(cornerRadius: 16))
+                        NavigationLink {
+                            PrayerMessageView(prayerMessages: viewModel.messageForPrayer, prayer: prayer.prayer)
+                        } label: {
+                            UserPrayers(prayer: prayer)
+                                .onTapGesture {
+                                    self.prayer = prayer
+                                    prayerMessagesAreShowing = true
+                                }
+                                .background(.black)
+                                .clipShape(RoundedRectangle(cornerRadius: 16))
+                        }
+
+                     
 
                         
                     }
@@ -104,6 +125,11 @@ struct ListOfUserPrayers: View {
             }.frame(width: UIScreen.main.bounds.width).listRowBackground(Color.clear)
             
         }.padding([.top,.bottom])
+            .onAppear{ Task{ await viewModel.getUserPrayerRequest() } }
+//            .sheet(isPresented: $prayerMessagesAreShowing) {
+//                PrayerMessageView(prayerMessages: viewModel.messageForPrayer,
+//                                  prayer: prayer?.prayer ?? "")
+//            }
     }
 }
 
@@ -155,35 +181,37 @@ struct PrayerMessageView: View {
                 .offset(x: 500, y:-6)
             VStack{
                 Text(prayer)
-                    .font(.system(size:40))
+                    .font(.system(size:30))
                     .fontWeight(.heavy)
                     .padding()
-                
-                ScrollView{
+                if !prayerMessages.isEmpty{
+                    ScrollView{
                     ForEach(prayerMessages, id:\.self){ message in
                         VStack{
                             Text(message)
-                                .font(.system(size: 24))
-                                .fontWeight(.heavy).padding()
+                                .frame(maxWidth: .infinity,alignment: .leading)
+                                .foregroundColor(.white)
                             
                             Button(action:{
                                 //Report User comments
                             }){
                                 Text("Report")
                                     .padding()
-                                    .frame(width: UIScreen.main.bounds.width-20,alignment: .trailing)
+                                    .frame(maxWidth: .infinity,alignment: .trailing)
                             }
                             
-                        }.background()
-                            .frame(width: UIScreen.main.bounds.width-20, alignment: .trailing)
-                            .cornerRadius(16).overlay(RoundedRectangle(cornerRadius: 16)
-                                .stroke(lineWidth: 4)).padding(3).shadow(radius: 4)
+                        }.padding([.leading,.trailing,.top]).background(.black)
+                            .clipShape(RoundedRectangle(cornerRadius: 16))
+                            .shadow(radius: 6)
+                            .padding([.trailing,.leading])
+                        
                     }
-                }.frame(width:UIScreen.main.bounds.width)
-            }
-            
+                }.frame(maxWidth: .infinity)
+                }else{
+                    Text("This Prayer Request has no messages").foregroundColor(.primary).padding()}
+                Spacer()
+            }.padding(.top,30)
         }
-        
     }
 }
 

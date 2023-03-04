@@ -46,8 +46,8 @@ class FirebaseManager: FirebaseManagerProtocol{
         }
     }
     
-    func updateDataInFirebase(at location: Collection, data: [String:Any]){
-        location.documentReference.updateData(data)
+    func updateDataInFirebase(at reference: DocumentReference, data: [String:Any]){
+        reference.updateData(data)
     }
     
     //MARK: - Retrieving Data from Firebase
@@ -74,8 +74,8 @@ class FirebaseManager: FirebaseManagerProtocol{
         }
     }
     
-    func getFirebaseDocumentData(for reference: Collection, completion: @escaping (Result<[String:Any], FirebaseManagerError>) -> Void){
-        reference.documentReference.getDocument { (document, error) in
+    func getFirebaseDocumentData(for reference: DocumentReference, completion: @escaping (Result<[String:Any], FirebaseManagerError>) -> Void){
+        reference.getDocument { (document, error) in
             if let error = error{ completion(.failure(.firebaseError(error))) }
             else{
                 guard let document = document, let data = document.data() else{

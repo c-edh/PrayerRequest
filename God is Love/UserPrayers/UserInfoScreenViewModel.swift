@@ -11,24 +11,34 @@ import Firebase
 @MainActor
 class UserInfoScreenViewModel: ObservableObject{
 
-    
-  //  @Published var user: UserModel
+    @Published var user: UserModel? = nil
     @Published var userPrayers : [PrayerModel] = []
     @Published var messageForPrayer: [String] = []
 
     private let firebaseManager = FirebaseManager()
     
     func getUserData(){
-//        firebase.getUserData(){ user in
-//            self.user = user
-//        }
+        guard let user = Auth.auth().currentUser else{ return }
+                
+        let reference = Collection.UserCollection(.User(user)).documentReference
+        
+        firebaseManager.getFirebaseDocumentData(for: reference) { userData in
+            switch userData {
+            case .success(let userInfo):
+                self.user = UserModel(userDocument: userInfo)
+                print(userInfo)
+            
+            case .failure(let failure):
+                print(failure)
+            }
+        }
     }
  
     func getUserPrayerRequest() async{
-        guard let user = Auth.auth().currentUser else{
-            return
-        }
+        guard let user = Auth.auth().currentUser else{ return }
+        
         let reference = Collection.UserDocument.Prayer(user, documentID: nil).userCollectionReference
+        
         firebaseManager.getFirebaseDataInCollection(for: reference,allowUserData: true){ result in
             switch result {
             case .success(let prayers):

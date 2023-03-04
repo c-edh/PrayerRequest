@@ -26,6 +26,8 @@
 		F4BC598C28BD159D00D16259 /* UserInfoScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4BC598B28BD159D00D16259 /* UserInfoScreenViewModel.swift */; };
 		F4BC598F28BDB56300D16259 /* PrayerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4BC598E28BDB56300D16259 /* PrayerModel.swift */; };
 		F4C7DF6829A2AB250070DD89 /* FirebaseManagerProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4C7DF6729A2AB250070DD89 /* FirebaseManagerProtocols.swift */; };
+		F4D0623E29B4049E00A5C60F /* CustomTextFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4D0623D29B4049E00A5C60F /* CustomTextFieldView.swift */; };
+		F4D0624029B408A700A5C60F /* ButtonLabelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4D0623F29B408A700A5C60F /* ButtonLabelView.swift */; };
 		F4DCE662295FA4FC00496CAB /* FirebaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4DCE661295FA4FC00496CAB /* FirebaseManager.swift */; };
 		F4DCE6642960C4D500496CAB /* FirebaseDatabaseConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4DCE6632960C4D500496CAB /* FirebaseDatabaseConstants.swift */; };
 		F4E598D428C1C1FC00226372 /* PhotoPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4E598D328C1C1FC00226372 /* PhotoPicker.swift */; };
@@ -55,6 +57,8 @@
 		F4BC598B28BD159D00D16259 /* UserInfoScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoScreenViewModel.swift; sourceTree = "<group>"; };
 		F4BC598E28BDB56300D16259 /* PrayerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerModel.swift; sourceTree = "<group>"; };
 		F4C7DF6729A2AB250070DD89 /* FirebaseManagerProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseManagerProtocols.swift; sourceTree = "<group>"; };
+		F4D0623D29B4049E00A5C60F /* CustomTextFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextFieldView.swift; sourceTree = "<group>"; };
+		F4D0623F29B408A700A5C60F /* ButtonLabelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonLabelView.swift; sourceTree = "<group>"; };
 		F4DCE661295FA4FC00496CAB /* FirebaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseManager.swift; sourceTree = "<group>"; };
 		F4DCE6632960C4D500496CAB /* FirebaseDatabaseConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseDatabaseConstants.swift; sourceTree = "<group>"; };
 		F4E598D328C1C1FC00226372 /* PhotoPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPicker.swift; sourceTree = "<group>"; };
@@ -113,6 +117,7 @@
 				F4B77B8428B9173100226F80 /* God is Love.entitlements */,
 				F41F602828B5D600008A4EBF /* God_is_LoveApp.swift */,
 				F4BC598D28BDB54800D16259 /* Model */,
+				F4D0623C29B4047100A5C60F /* CustomViews */,
 				F4C7DF6329A281BD0070DD89 /* Manager */,
 				F4C7DF6629A2A0140070DD89 /* UserPrayers */,
 				F4C7DF6529A29FF00070DD89 /* PrayerRequest */,
@@ -198,6 +203,15 @@
 				F4B77B8728BC5D8D00226F80 /* UserInfoScreen.swift */,
 			);
 			path = UserPrayers;
+			sourceTree = "<group>";
+		};
+		F4D0623C29B4047100A5C60F /* CustomViews */ = {
+			isa = PBXGroup;
+			children = (
+				F4D0623D29B4049E00A5C60F /* CustomTextFieldView.swift */,
+				F4D0623F29B408A700A5C60F /* ButtonLabelView.swift */,
+			);
+			path = CustomViews;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -322,10 +336,12 @@
 				F4B77B8828BC5D8D00226F80 /* UserInfoScreen.swift in Sources */,
 				F4BC598C28BD159D00D16259 /* UserInfoScreenViewModel.swift in Sources */,
 				F41F602B28B5D600008A4EBF /* ContentView.swift in Sources */,
+				F4D0624029B408A700A5C60F /* ButtonLabelView.swift in Sources */,
 				F42F018A28B7254400BAAEC3 /* PrayersViewModel.swift in Sources */,
 				F41F603528B5D601008A4EBF /* God_is_Love.xcdatamodeld in Sources */,
 				F485B2F22979A3BC008106C8 /* UserModel.swift in Sources */,
 				F41F602928B5D600008A4EBF /* God_is_LoveApp.swift in Sources */,
+				F4D0623E29B4049E00A5C60F /* CustomTextFieldView.swift in Sources */,
 				F41F603C28B5DBEB008A4EBF /* PrayerRequestView.swift in Sources */,
 				F461B41828CD9DE500C39149 /* machineLearningModel.mlmodel in Sources */,
 				F4E598D428C1C1FC00226372 /* PhotoPicker.swift in Sources */,

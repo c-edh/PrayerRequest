@@ -43,12 +43,12 @@ extension AuthenticationProtocol{
 
 protocol UploadDataProtocol{
     func addToFirebase(with reference: Collection, data: [String: Any], completion: @escaping (_ documentReference: String) -> Void)
-    func updateDataInFirebase(at location: Collection, data: [String:Any])
+    func updateDataInFirebase(at reference: DocumentReference, data: [String:Any])
     func addImageToFireBase(documentId: String, image: UIImage)
 }
 
 protocol GetDataProtocol{
     func getFirebaseDataInCollection(for reference: CollectionReference, allowUserData: Bool, limitAmount: Int, completion: @escaping (Result<[[String:Any]], FirebaseManagerError>) -> Void)
-    func getFirebaseDocumentData(for reference: Collection, completion: @escaping (Result<[String:Any], FirebaseManagerError>) -> Void)
+    func getFirebaseDocumentData(for reference: DocumentReference, completion: @escaping (Result<[String:Any], FirebaseManagerError>) -> Void)
     func getFirebaseImage(id: String, completion: @escaping (Result<UIImage, FirebaseManagerError>) -> Void)
 }

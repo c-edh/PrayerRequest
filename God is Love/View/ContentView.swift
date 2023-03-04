@@ -9,37 +9,39 @@ import SwiftUI
 import AuthenticationServices
 
 struct ContentView: View {
-    
     @StateObject var loginData = LoginViewModel()
 
     @State private var status = ""
+    @AppStorage("accountSetUp") var accountSetUp = false
     
     var body: some View {
-        
         NavigationView{
-            if loginData.login == true{
-                StartMenu()
-            }
+            
+            if loginData.login == true && !accountSetUp{
+                SetUPView(viewModel: loginData)
+           }
+            else if loginData.login == false{ StartMenu() }
+            
             else{
-            ZStack{
-                Image("backgroundCross.png")
-                    .resizable().aspectRatio(contentMode: .fill)
-                    .frame(width:UIScreen.main.bounds.height,height:UIScreen.main.bounds.height)
-                    .offset(x: 500, y:-6)
-                
-                VStack{
-                    Spacer()
+                ZStack{
+                    Image("backgroundCross.png")
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width:UIScreen.main.bounds.height,
+                               height:UIScreen.main.bounds.height)
+                        .offset(x: 500, y:-6)
                     
-                    Text("God is Love")
-                        .multilineTextAlignment(.center)
-                        .font(.system(size: 50))
-                        .fontWeight(.heavy)
-                        .shadow(radius: 3)
-                    
-                    Spacer(minLength: 30)
-                    
-                    //Change back to true when done editing
-                 
+                    VStack{
+                        Spacer()
+                        
+                        Text("God is Love")
+                            .multilineTextAlignment(.center)
+                            .font(.system(size: 50))
+                            .fontWeight(.heavy)
+                            .shadow(radius: 3)
+                        
+                        Spacer(minLength: 30)
+                        
                         Text(status).offset(y:-70)
                         
                         SignInWithAppleButton() { request in
@@ -70,10 +72,7 @@ struct ContentView: View {
             }
         }
     }
-    
 }
-
-
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
@@ -84,30 +83,40 @@ struct ContentView_Previews: PreviewProvider {
 
 struct StartMenu: View {
     var body: some View {
-    
         ZStack{
             TabView {
-                
-                PrayerRequestView().tabItem {
-                    Label("Request", systemImage: "shift.fill")
-                }
-                
-                PrayersView().padding()
-                    .tabItem {
-                        Label("Prayers", systemImage: "person.3.fill")
-                    }
-                
+                PrayerRequestView()
+                    .tabItem { Label("Request", systemImage: "shift.fill") }
+                PrayersView()
+                    .tabItem { Label("Prayers", systemImage: "person.3.fill") }
                 UserInfoScreen()
-                    .tabItem {
-                        Label("Profile", systemImage: "person.circle")
-                    }
-                
+                    .tabItem { Label("Profile", systemImage: "person.circle") }
             }
-            
-            
-            
         }
-            
-        }
+    }
 }
 
+
+struct SetUPView: View {
+    @ObservedObject var viewModel: LoginViewModel
+    
+    @State var name = ""
+    @State var email = ""
+    var body: some View {
+        ZStack{
+            
+            Image("backgroundCross.png")
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+                .frame(width:UIScreen.main.bounds.height,
+                       height:UIScreen.main.bounds.height)
+                .offset(x: 500, y:-6)
+            
+            VStack{
+                CustomTextFieldView(label: "Name", hint: "John Smith", text: $name)
+                
+                CustomTextFieldView(label: "Email", hint: "abc@123.com", text: $email)
+            }
+        }
+    }
+}

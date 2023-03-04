@@ -12,7 +12,7 @@ struct PrayersView: View {
     @StateObject var viewModel = PrayersViewModel()
     @State var prayAdviceIsShowing = false
     @Environment(\.colorScheme) private var colorScheme
-
+    
     
     var body: some View {
         NavigationStack{
@@ -30,38 +30,27 @@ struct PrayersView: View {
                 //
                 //            }else{
                 VStack{
-                    
                     PrayerView(prayer: viewModel.prayer)
-                        .padding()
                     
+                    NextAndPrayButton(prayAdviceIsShowing: $prayAdviceIsShowing, viewModel: viewModel).frame(maxWidth: .infinity)
+                    Spacer()
                     
-                    
-                    NextAndPrayButton(prayAdviceIsShowing: $prayAdviceIsShowing, viewModel: viewModel)
-//                    Spacer()
-//                        .frame(height: 25.0)
-                    
-                }//.frame(maxWidth: .infinity, maxHeight: .infinity)
-                    
+                }.frame(maxHeight: .infinity).padding([.top,.bottom],50)
                     .sheet(isPresented: $prayAdviceIsShowing) {
                         PrayerAdvice(isOpen: $prayAdviceIsShowing,
-                                     viewModel: viewModel) .presentationDetents([.medium, .fraction(0.3)])
+                                     viewModel: viewModel) .presentationDetents([ .fraction(0.3)])
                             .background(colorScheme == .dark ? Color(hue: 1.0, saturation: 0.0, brightness: 0.6): Color(red: 0.995, green: 0.908, blue: 0.751))
                     }
             }
         }.onAppear{ viewModel.getPrayersRequest() }
-        .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-            
-            Button("Report"){
-                
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button("Report"){
+                        
+                    }
+                }
             }
-            
-        }
-           
-        }
-        
     }
-    
 }
 
 struct PrayersView_Previews: PreviewProvider {
@@ -90,8 +79,8 @@ struct PrayerAdvice:View{
                 .font(.system(size: 20))
                 .fontWeight(.semibold)
                 .foregroundColor(.black)
+            
             ZStack{
-                
                 TextEditor(text: $encouragement)
                     .clipShape(RoundedRectangle(cornerRadius: 16))
                     .shadow(radius: 5)
@@ -100,6 +89,7 @@ struct PrayerAdvice:View{
                         textHintIsShowing = false
                     }
                     .focused($focusedField, equals: .encouragement)
+                    .frame(maxHeight: 200)
                 if textHintIsShowing{
                     Text("Words of Encouragement")
                         .foregroundColor(Color(hue: 1.0, saturation: 0.0, brightness: 0.605))
@@ -165,7 +155,7 @@ struct PrayerView: View {
                 Text(prayer?.prayer ?? "No Prayer")
                     .font(.system(size: 35))
                     .fontWeight(.bold)
-            }
+            }.frame(width: UIScreen.main.bounds.width)
         }
     }
 }
@@ -175,9 +165,9 @@ struct NextAndPrayButton: View {
     @Binding var prayAdviceIsShowing: Bool
     @State   var viewModel: PrayersViewModel
     @Environment(\.colorScheme) private var colorScheme
-
+    
     var body: some View {
-        HStack{
+        HStack(spacing: 100){
             Button(action: {
                 //Pop from the Stack
                 prayAdviceIsShowing.toggle()
@@ -186,14 +176,11 @@ struct NextAndPrayButton: View {
                     .foregroundColor(colorScheme == .dark ? .white : .black)
                     .fontWeight(.bold)
             })
-            Spacer()
+            //  Spacer()
             Button(action: {
                 viewModel.userPray()
             }, label: {
-                Text("Pray")
-                    .frame(width:100,height: 50)
-                    .background(.black).foregroundColor(.white)
-                    .cornerRadius(16)
+                ButtonLabelView(labelText: "Pray")
             })
         }.font(.system(size: 20).bold()).padding(30)
     }
