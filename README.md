@@ -1,5 +1,5 @@
 
-# Prayer Request 
+# Prayer Request (Work on in-Progess)
 Developer: **Corey Edh**
 
 ## About this app
@@ -33,8 +33,6 @@ Why did I choose to do a prayer app, I choose to do a prayer app because I notic
 ## Roadmap
 
 - Change Image Background
-
-
 
 ## Screenshots
 
