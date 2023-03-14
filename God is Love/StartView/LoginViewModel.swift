@@ -17,15 +17,9 @@ class LoginViewModel: ObservableObject{
     private let firebaseManager = FirebaseManager.shared
     
     func authenticate(credential: ASAuthorizationAppleIDCredential){
-        guard let token = credential.identityToken else{
-            print("error with identityToken")
-            return
-        }
+        guard let token = credential.identityToken else{ print("error with identityToken"); return }
         
-        guard let tokenString = String(data: token, encoding: .utf8) else{
-            print("Token error")
-            return
-        }
+        guard let tokenString = String(data: token, encoding: .utf8) else{ print("Token error"); return }
 
         firebaseManager.firebaseCredential(idToken: tokenString, nonce: nonce){ [weak self] result in
             switch result {
@@ -37,16 +31,23 @@ class LoginViewModel: ObservableObject{
                 print(failure)
             }
         }
-        
     }
     
-    func setUpAccount(name: String){
-        guard let user = Auth.auth().currentUser else{
-            print("No current user")
-            return
+    func setUpAccount(name: String, image: UIImage?, completion: @escaping (Bool)->Void){
+        guard let user = Auth.auth().currentUser else{ completion(false); return}
+        
+        let data = ["Name": name, "FriendsCount": 0, "PrayerCount": 0] as [String: Any]
+        
+        self.firebaseManager.addToFirebase(with: .UserCollection(.User(user)), data: data) { result in
+            switch result {
+            case .success(_):
+                if let image{ self.firebaseManager.addImageToFireBase(storeAt: .user(userID: user.uid), image: image) }
+                completion(true)
+            case .failure(let failure):
+                print(failure.toString)
+                completion(false)
+            }
         }
-        let data = ["Name": name, "FriendsCount": 0, "Image": "", "PrayerCount": 0] as [String: Any]
-        self.firebaseManager.addToFirebase(with: .UserCollection(.User(user)), data: data) { _ in }
     }
     
     func logOut(){

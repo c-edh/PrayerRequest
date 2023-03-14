@@ -45,7 +45,7 @@ class PrayersViewModel: ObservableObject{
     }
     
     func getPrayersRequest(){
-        let reference = Collection.PrayerCollection().collectionReference
+        let reference = CollectionPaths.PrayerCollection().collectionReference
         firebaseManager.getFirebaseDataInCollection(for: reference) { result in
             switch result {
             case .success(let prayers):
@@ -71,7 +71,7 @@ class PrayersViewModel: ObservableObject{
     
         var data = ["Prayer Count": prayer.prayerCount + 1] as [String: Any]
     
-        let reference = Collection.PrayerCollection(documentID: prayer.docID).documentReference
+        let reference = CollectionPaths.PrayerCollection(documentID: prayer.docID).documentReference
 
         if let message, let date = getTimeStamp()["Date"]{
             data["Message"] = message

@@ -28,8 +28,11 @@
 		F4C7DF6829A2AB250070DD89 /* FirebaseManagerProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4C7DF6729A2AB250070DD89 /* FirebaseManagerProtocols.swift */; };
 		F4D0623E29B4049E00A5C60F /* CustomTextFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4D0623D29B4049E00A5C60F /* CustomTextFieldView.swift */; };
 		F4D0624029B408A700A5C60F /* ButtonLabelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4D0623F29B408A700A5C60F /* ButtonLabelView.swift */; };
+		F4D0624229B40FA200A5C60F /* ImageSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4D0624129B40FA200A5C60F /* ImageSelectorView.swift */; };
+		F4D0624429B42D5000A5C60F /* ListOfUserPrayers.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4D0624329B42D5000A5C60F /* ListOfUserPrayers.swift */; };
+		F4D0624629B4366D00A5C60F /* SwiftViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4D0624529B4366D00A5C60F /* SwiftViewExtensions.swift */; };
 		F4DCE662295FA4FC00496CAB /* FirebaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4DCE661295FA4FC00496CAB /* FirebaseManager.swift */; };
-		F4DCE6642960C4D500496CAB /* FirebaseDatabaseConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4DCE6632960C4D500496CAB /* FirebaseDatabaseConstants.swift */; };
+		F4DCE6642960C4D500496CAB /* FirebaseManagerConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4DCE6632960C4D500496CAB /* FirebaseManagerConstants.swift */; };
 		F4E598D428C1C1FC00226372 /* PhotoPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4E598D328C1C1FC00226372 /* PhotoPicker.swift */; };
 /* End PBXBuildFile section */
 
@@ -59,8 +62,11 @@
 		F4C7DF6729A2AB250070DD89 /* FirebaseManagerProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseManagerProtocols.swift; sourceTree = "<group>"; };
 		F4D0623D29B4049E00A5C60F /* CustomTextFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextFieldView.swift; sourceTree = "<group>"; };
 		F4D0623F29B408A700A5C60F /* ButtonLabelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonLabelView.swift; sourceTree = "<group>"; };
+		F4D0624129B40FA200A5C60F /* ImageSelectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSelectorView.swift; sourceTree = "<group>"; };
+		F4D0624329B42D5000A5C60F /* ListOfUserPrayers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListOfUserPrayers.swift; sourceTree = "<group>"; };
+		F4D0624529B4366D00A5C60F /* SwiftViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftViewExtensions.swift; sourceTree = "<group>"; };
 		F4DCE661295FA4FC00496CAB /* FirebaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseManager.swift; sourceTree = "<group>"; };
-		F4DCE6632960C4D500496CAB /* FirebaseDatabaseConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseDatabaseConstants.swift; sourceTree = "<group>"; };
+		F4DCE6632960C4D500496CAB /* FirebaseManagerConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseManagerConstants.swift; sourceTree = "<group>"; };
 		F4E598D328C1C1FC00226372 /* PhotoPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPicker.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -117,13 +123,13 @@
 				F4B77B8428B9173100226F80 /* God is Love.entitlements */,
 				F41F602828B5D600008A4EBF /* God_is_LoveApp.swift */,
 				F4BC598D28BDB54800D16259 /* Model */,
+				F4D0624729B44F5A00A5C60F /* Extensions */,
 				F4D0623C29B4047100A5C60F /* CustomViews */,
 				F4C7DF6329A281BD0070DD89 /* Manager */,
 				F4C7DF6629A2A0140070DD89 /* UserPrayers */,
 				F4C7DF6529A29FF00070DD89 /* PrayerRequest */,
 				F4C7DF6429A29FC80070DD89 /* Prayers */,
-				F42F018628B70C7900BAAEC3 /* ViewModel */,
-				F41F603D28B5DBF2008A4EBF /* View */,
+				F41F603D28B5DBF2008A4EBF /* StartView */,
 				F41F602C28B5D601008A4EBF /* Assets.xcassets */,
 				F41F603128B5D601008A4EBF /* Persistence.swift */,
 				F41F603328B5D601008A4EBF /* God_is_Love.xcdatamodeld */,
@@ -141,21 +147,13 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
-		F41F603D28B5DBF2008A4EBF /* View */ = {
-			isa = PBXGroup;
-			children = (
-				F4E598D328C1C1FC00226372 /* PhotoPicker.swift */,
-				F41F602A28B5D600008A4EBF /* ContentView.swift */,
-			);
-			path = View;
-			sourceTree = "<group>";
-		};
-		F42F018628B70C7900BAAEC3 /* ViewModel */ = {
+		F41F603D28B5DBF2008A4EBF /* StartView */ = {
 			isa = PBXGroup;
 			children = (
 				F4B77B8528B92BBA00226F80 /* LoginViewModel.swift */,
+				F41F602A28B5D600008A4EBF /* ContentView.swift */,
 			);
-			path = ViewModel;
+			path = StartView;
 			sourceTree = "<group>";
 		};
 		F4BC598D28BDB54800D16259 /* Model */ = {
@@ -170,7 +168,7 @@
 			isa = PBXGroup;
 			children = (
 				F4DCE661295FA4FC00496CAB /* FirebaseManager.swift */,
-				F4DCE6632960C4D500496CAB /* FirebaseDatabaseConstants.swift */,
+				F4DCE6632960C4D500496CAB /* FirebaseManagerConstants.swift */,
 				F4C7DF6729A2AB250070DD89 /* FirebaseManagerProtocols.swift */,
 			);
 			path = Manager;
@@ -201,6 +199,7 @@
 				F485B2F12979A3BC008106C8 /* UserModel.swift */,
 				F4BC598B28BD159D00D16259 /* UserInfoScreenViewModel.swift */,
 				F4B77B8728BC5D8D00226F80 /* UserInfoScreen.swift */,
+				F4D0624329B42D5000A5C60F /* ListOfUserPrayers.swift */,
 			);
 			path = UserPrayers;
 			sourceTree = "<group>";
@@ -210,8 +209,18 @@
 			children = (
 				F4D0623D29B4049E00A5C60F /* CustomTextFieldView.swift */,
 				F4D0623F29B408A700A5C60F /* ButtonLabelView.swift */,
+				F4D0624129B40FA200A5C60F /* ImageSelectorView.swift */,
+				F4E598D328C1C1FC00226372 /* PhotoPicker.swift */,
 			);
 			path = CustomViews;
+			sourceTree = "<group>";
+		};
+		F4D0624729B44F5A00A5C60F /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				F4D0624529B4366D00A5C60F /* SwiftViewExtensions.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -333,8 +342,11 @@
 				F41F603228B5D601008A4EBF /* Persistence.swift in Sources */,
 				F4C7DF6829A2AB250070DD89 /* FirebaseManagerProtocols.swift in Sources */,
 				F42F018828B70CB300BAAEC3 /* PrayersView.swift in Sources */,
+				F4D0624429B42D5000A5C60F /* ListOfUserPrayers.swift in Sources */,
 				F4B77B8828BC5D8D00226F80 /* UserInfoScreen.swift in Sources */,
+				F4D0624229B40FA200A5C60F /* ImageSelectorView.swift in Sources */,
 				F4BC598C28BD159D00D16259 /* UserInfoScreenViewModel.swift in Sources */,
+				F4D0624629B4366D00A5C60F /* SwiftViewExtensions.swift in Sources */,
 				F41F602B28B5D600008A4EBF /* ContentView.swift in Sources */,
 				F4D0624029B408A700A5C60F /* ButtonLabelView.swift in Sources */,
 				F42F018A28B7254400BAAEC3 /* PrayersViewModel.swift in Sources */,
@@ -346,7 +358,7 @@
 				F461B41828CD9DE500C39149 /* machineLearningModel.mlmodel in Sources */,
 				F4E598D428C1C1FC00226372 /* PhotoPicker.swift in Sources */,
 				F4DCE662295FA4FC00496CAB /* FirebaseManager.swift in Sources */,
-				F4DCE6642960C4D500496CAB /* FirebaseDatabaseConstants.swift in Sources */,
+				F4DCE6642960C4D500496CAB /* FirebaseManagerConstants.swift in Sources */,
 				F41F603F28B5E767008A4EBF /* PrayerRequestViewModel.swift in Sources */,
 				F4B77B8628B92BBA00226F80 /* LoginViewModel.swift in Sources */,
 			);

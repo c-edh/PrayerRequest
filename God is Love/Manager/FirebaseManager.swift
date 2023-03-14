@@ -16,25 +16,28 @@ class FirebaseManager: FirebaseManagerProtocol{
     //MARK: - User Authentication to Firebase
     func setUpUser(userInfo: [String:Any]){
         guard let user = Auth.auth().currentUser else{ return }
-        Collection.UserCollection(.User(user)).documentReference.setData(userInfo)
+        CollectionPaths.UserCollection(.User(user)).documentReference.setData(userInfo)
     }
     
     //MARK: - Uploading to Firebase
     
-    func addToFirebase(with reference: Collection, data: [String: Any], completion: @escaping (_ documentReference: String) -> Void){
+    func addToFirebase(with reference: CollectionPaths, data: [String: Any], completion: @escaping ( Result<String, FirebaseManagerError> ) -> Void){
         guard let user = Auth.auth().currentUser else{ return }
         
         var fireBaseData = data
         fireBaseData["UserID"] = user.uid
         
         reference.documentReference.setData(fireBaseData){ err in
-            if let err = err { print("Error adding document: \(err)") }
-            else { completion(reference.documentReference.documentID) }
+            if let err = err {
+                print("Error adding document: \(err)")
+                completion(.failure(.incorrectData))
+            }
+            else { completion(.success(reference.documentReference.documentID)) }
         }
     }
     
-    func addImageToFireBase(documentId: String, image: UIImage){
-        let storageRef = Storage.storage().reference().child("Prayers/\(documentId)")
+    func addImageToFireBase(storeAt: ImageStorage, image: UIImage){
+        let storageRef = Storage.storage().reference().child(storeAt.reference)
         guard let compressedImage = image.jpegData(compressionQuality: 0.75) else{ return }
         
         let metaData = StorageMetadata()
@@ -52,7 +55,7 @@ class FirebaseManager: FirebaseManagerProtocol{
     
     //MARK: - Retrieving Data from Firebase
     
-    func getFirebaseDataInCollection(for reference: CollectionReference, allowUserData: Bool = false, limitAmount: Int = 10, completion: @escaping (Result<[[String:Any]], FirebaseManagerError>) -> Void){
+    func getFirebaseDataInCollection(for reference: CollectionReference, allowUserData: Bool = false, limitAmount: Int = 10, completion: @escaping ( Result<[[String:Any]], FirebaseManagerError> ) -> Void){
         guard let user = Auth.auth().currentUser else{ return }
         
         var query = reference.limit(to: limitAmount)
@@ -113,9 +116,8 @@ class FirebaseManager: FirebaseManagerProtocol{
             
             var messageArray : [String] = []
             
-            for message in messages {
-                messageArray.append(message["Message"] ?? "Message Error")
-            }
+            for message in messages { messageArray.append(message["Message"] ?? "Message Error") }
+            
             completion(.success(messageArray))
         }
     }

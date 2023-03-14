@@ -16,17 +16,13 @@ enum MachineLearningPredictions: String{
 class PrayerRequestViewModel: ObservableObject{
     @Published var messageIsSuicidal = false{
         didSet{
-            if messageIsSuicidal == true{
-                messageIsDepression = false
-            }
+            if messageIsSuicidal == true{ messageIsDepression = false }
         }
     }
     
     @Published var messageIsDepression = false{
         didSet{
-            if messageIsDepression == true{
-                messageIsSuicidal = false
-            }
+            if messageIsDepression == true{ messageIsSuicidal = false }
         }
     }
     
@@ -42,11 +38,16 @@ class PrayerRequestViewModel: ObservableObject{
                                   "Prayer Count": 0,
                                   "Next Count": 0] as [String : Any]
                 
-        firebaseManager.addToFirebase(with: .PrayerCollection(), data: prayerRequestInfo) { [weak self] documentReference in
-            guard let prayerImage = prayerImage else{
-                return
+        firebaseManager.addToFirebase(with: .PrayerCollection(), data: prayerRequestInfo) { [weak self] result in
+            guard let prayerImage = prayerImage else{ return }
+            
+            switch result{
+            case .success(let reference):
+                self?.firebaseManager.addImageToFireBase(storeAt: .prayer(documentId: reference), image: prayerImage)
+            case .failure(let error):
+                print(error.toString)
             }
-            self?.firebaseManager.addImageToFireBase(documentId: documentReference, image: prayerImage)
+            
         }
     }
 
@@ -70,10 +71,7 @@ class PrayerRequestViewModel: ObservableObject{
                 messageIsDepression = false
                 print("Normal Message, no suicidal or depression detected")
             }
-            
-        } catch{
-            fatalError("No to load a part in NL model")
-        }
+        } catch{ fatalError("No to load a part in NL model") }
         
     }
     

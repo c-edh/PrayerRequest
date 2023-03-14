@@ -10,7 +10,7 @@ import SwiftUI
 
 struct PhotoPicker: UIViewControllerRepresentable{
     
-    @Binding var profileImage: UIImage?
+    @Binding var image: UIImage?
     @Binding var userSelectedImage: Bool
 
     
@@ -42,12 +42,10 @@ struct PhotoPicker: UIViewControllerRepresentable{
             if let image = info[.editedImage] as? UIImage{
                 guard let data = image.jpegData(compressionQuality: 0.4), let compressedImage = UIImage(data: data) else{
                     
-                    //error
-                    
                     return
                 }
                 
-                photoPicker.profileImage = compressedImage
+                photoPicker.image = compressedImage
                 photoPicker.userSelectedImage = true
                 
             }else{

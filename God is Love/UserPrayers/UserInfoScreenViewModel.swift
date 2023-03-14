@@ -20,7 +20,7 @@ class UserInfoScreenViewModel: ObservableObject{
     func getUserData(){
         guard let user = Auth.auth().currentUser else{ return }
                 
-        let reference = Collection.UserCollection(.User(user)).documentReference
+        let reference = CollectionPaths.UserCollection(.User(user)).documentReference
         
         firebaseManager.getFirebaseDocumentData(for: reference) { userData in
             switch userData {
@@ -37,7 +37,7 @@ class UserInfoScreenViewModel: ObservableObject{
     func getUserPrayerRequest() async{
         guard let user = Auth.auth().currentUser else{ return }
         
-        let reference = Collection.UserDocument.Prayer(user, documentID: nil).userCollectionReference
+        let reference = CollectionPaths.UserDocumentPaths.Prayer(user, documentID: nil).userCollectionReference
         
         firebaseManager.getFirebaseDataInCollection(for: reference,allowUserData: true){ result in
             switch result {
@@ -70,6 +70,10 @@ class UserInfoScreenViewModel: ObservableObject{
                 print(failure)
             }
         }
+    }
+    
+    func logOut(){
+        firebaseManager.logOutFromFirebase()
     }
     
     func addFriend(){

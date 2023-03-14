@@ -27,7 +27,4 @@ struct UserModel:Identifiable{
     mutating func addImage(image: UIImage){
         self.image = image
     }
-
-
-
 }

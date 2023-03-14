@@ -38,6 +38,7 @@ struct PrayerRequestView: View {
 struct PrayerRequestView_Previews: PreviewProvider {
     static var previews: some View {
         PrayerRequestView()
+        SuicidalHelpView()
     }
 }
 
@@ -47,7 +48,6 @@ struct GetPrayerRequestView: View {
     @State private var prayerInfo: String = ""
     @State private var name = ""
     @State private var prayerImage: UIImage?
-    @State private var userSelectedImage = true
     @State private var isShowingImagePhotoPicker = false
     @State private var showSubmission = false
     @Environment(\.colorScheme) var colorScheme
@@ -67,61 +67,8 @@ struct GetPrayerRequestView: View {
                     SuicidalHelpView()
                 }else{
                     Spacer()
-                    ZStack{
-                        if prayerImage == nil{
-                            Image(systemName: "photo")
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(width: 200)
-                                .clipShape(Circle())
-                                .overlay(content: {
-                                    Circle()
-                                        .stroke(lineWidth: 3)
-                                        .shadow(radius: 16)
-                                })
-                                .padding(.bottom)
-                                .onTapGesture {
-                                    isShowingImagePhotoPicker = true
-                                }
-                            Image(systemName: "plus.circle")
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .colorInvert()
-                                .frame(width: 50)
-                                .shadow(radius: 16)
-                                .offset(x:40, y: 50)
-                                .onTapGesture {
-                                    isShowingImagePhotoPicker = true
-                                }
-                            
-                        }else{
-                            Image(uiImage:(prayerImage!))
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(width: 200)
-                                .clipShape(Circle())
-                                .overlay(content: {
-                                    Circle()
-                                        .stroke(lineWidth: 3)
-                                        .shadow(radius: 16)
-                                })
-                                .padding(.bottom)
-                                .onTapGesture {
-                                    isShowingImagePhotoPicker = true
-                                }
-                            
-                            Image(systemName: "minus.circle")
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .foregroundColor(.red)
-                                .frame(width: 50)
-                                .shadow(radius: 16)
-                                .offset(x:60, y: 70)
-                                .onTapGesture {
-                                    prayerImage = nil
-                                }
-                        }
-                    }
+                    
+                    ImageSelectorView(image: $prayerImage)
                     
                     Text("Prayer Request")
                         .font(.title)
@@ -164,11 +111,7 @@ struct GetPrayerRequestView: View {
             }
             .alert("Your Prayer has been submitted", isPresented: $showSubmission, actions: { Button("Ok"){ dismiss() } })
             
-            .sheet(isPresented: $isShowingImagePhotoPicker, content: {
-                PhotoPicker(profileImage: $prayerImage, userSelectedImage: $userSelectedImage)
-                    .shadow(radius: 16)
-                
-            })
+          
         }
         .background(Color(UIColor(named: "backgroundColor")!))
     }
@@ -212,3 +155,4 @@ struct SuicidalHelpView: View {
         }.padding().frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
     }
 }
+

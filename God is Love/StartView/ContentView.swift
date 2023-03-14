@@ -18,7 +18,7 @@ struct ContentView: View {
         NavigationView{
             
             if loginData.login == true && !accountSetUp{
-                SetUPView(viewModel: loginData)
+                SetUPView(viewModel: loginData, setupComplete: $accountSetUp)
            }
             else if loginData.login == false{ StartMenu() }
             
@@ -99,9 +99,11 @@ struct StartMenu: View {
 
 struct SetUPView: View {
     @ObservedObject var viewModel: LoginViewModel
-    
+    @State var image: UIImage?
     @State var name = ""
     @State var email = ""
+    
+    @Binding var setupComplete: Bool
     var body: some View {
         ZStack{
             
@@ -113,9 +115,19 @@ struct SetUPView: View {
                 .offset(x: 500, y:-6)
             
             VStack{
-                CustomTextFieldView(label: "Name", hint: "John Smith", text: $name)
-                
-                CustomTextFieldView(label: "Email", hint: "abc@123.com", text: $email)
+                Spacer()
+                ImageSelectorView(image: $image).padding()
+                CustomTextFieldView(label: "Name", hint: "Your Name", text: $name)
+                Text("Optinal Info\n(Only your friends will see)").font(.caption)
+                Button {
+                    viewModel.setUpAccount(name: name, image: image) { accountCreated in
+                        DispatchQueue.main.async { self.setupComplete = accountCreated }
+                    }
+                    
+                } label: {
+                    ButtonLabelView(labelText: "Create")
+                }.padding()
+                Spacer()                
             }
         }
     }
