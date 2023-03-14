@@ -38,17 +38,19 @@ Why did I choose to do a prayer app, I choose to do a prayer app because I notic
 
 ## Screenshots
 
-![Start](https://user-images.githubusercontent.com/53097839/225134899-28e94b14-5466-46d1-9962-030537b2e747.png)
+![Start](https://user-images.githubusercontent.com/53097839/225136906-28e971bc-bfaa-4604-a8d2-4eb4810fae85.png)
 
-![PrayerRequestView](https://user-images.githubusercontent.com/53097839/225134975-8ca90a5b-e415-429e-b906-9b9410117717.png)
 
-![PrayerRequestView2](https://user-images.githubusercontent.com/53097839/225135128-da98c3c7-26a7-45bf-aab1-dd83e6304cf1.png)
+![PrayerRequestView](https://user-images.githubusercontent.com/53097839/225136977-314e4910-7d20-43a6-b93f-bae225259a1c.png)
 
-![PrayerView](https://user-images.githubusercontent.com/53097839/225135202-6bd1f280-2bf8-4a83-8ac2-4e8ddecf267d.png)
+
+![PrayerRequestView2](https://user-images.githubusercontent.com/53097839/225137049-f86e3f3c-0c01-4edb-8a3e-c2cb86f035a5.png)
+
+
+![PrayerView](https://user-images.githubusercontent.com/53097839/225137099-012508e7-987d-41ae-bdc2-5caf409bdf58.png)
 
 ![PrayView Message](https://user-images.githubusercontent.com/53097839/225135256-a4c713ee-49ef-40d8-8dff-0a35b2428032.png)
 
-![UserView](https://user-images.githubusercontent.com/53097839/225135322-e46dfdee-b0a2-4777-9a36-b296d8d999bb.png)
-
+![UserView](https://user-images.githubusercontent.com/53097839/225137154-9f5c5f0f-7027-4d8c-a35f-2de647b27bc8.png)
 
 
