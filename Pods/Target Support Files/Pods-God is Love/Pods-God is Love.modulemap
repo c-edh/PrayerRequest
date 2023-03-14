@@ -1,6 +1,0 @@
-framework module Pods_God_is_Love {
-  umbrella header "Pods-God is Love-umbrella.h"
-
-  export *
-  module * { export * }
-}
