@@ -4,7 +4,4 @@
    <FileRef
       location = "group:God is Love.xcodeproj">
    </FileRef>
-   <FileRef
-      location = "group:Pods/Pods.xcodeproj">
-   </FileRef>
 </Workspace>

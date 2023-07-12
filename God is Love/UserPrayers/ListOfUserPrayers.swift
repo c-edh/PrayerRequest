@@ -16,9 +16,9 @@ struct ListOfUserPrayers: View {
     
     var body: some View {
         VStack{
-            if let prayers = viewModel.userPrayers{
+            if !viewModel.userPrayers.isEmpty{
                 ScrollView{
-                ForEach(prayers){ prayer in
+                    ForEach(viewModel.userPrayers){ prayer in
                     LazyVStack{
                         NavigationLink {
                             PrayerMessageView(prayerMessages: viewModel.messageForPrayer, prayer: prayer.prayer)

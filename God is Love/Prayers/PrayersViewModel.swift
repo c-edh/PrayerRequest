@@ -12,7 +12,7 @@ class PrayersViewModel: ObservableObject{
     
     @Published var prayer: PrayerModel? {
         didSet{
-            firebaseManager.getFirebaseImage(id: prayer!.docID) {[weak self] result in
+            firebaseManager.getFirebaseImage(id: prayer!.docID) { [weak self] result in
                 switch result {
                 case .success(let image):
                     DispatchQueue.main.async {

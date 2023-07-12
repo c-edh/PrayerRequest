@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D97A846719F496C6F4753532 /* Pods_God_is_Love.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D8FEC55B8D782635F3B211D /* Pods_God_is_Love.framework */; };
 		F41F602928B5D600008A4EBF /* God_is_LoveApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F41F602828B5D600008A4EBF /* God_is_LoveApp.swift */; };
 		F41F602B28B5D600008A4EBF /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F41F602A28B5D600008A4EBF /* ContentView.swift */; };
 		F41F602D28B5D601008A4EBF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F41F602C28B5D601008A4EBF /* Assets.xcassets */; };
@@ -21,6 +20,9 @@
 		F42F018A28B7254400BAAEC3 /* PrayersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F42F018928B7254400BAAEC3 /* PrayersViewModel.swift */; };
 		F461B41828CD9DE500C39149 /* machineLearningModel.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = F461B41728CD9DE500C39149 /* machineLearningModel.mlmodel */; };
 		F485B2F22979A3BC008106C8 /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F485B2F12979A3BC008106C8 /* UserModel.swift */; };
+		F4A689142A3E3C9500BCF0CB /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = F4A689132A3E3C9500BCF0CB /* FirebaseAuth */; };
+		F4A689162A3E3C9500BCF0CB /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = F4A689152A3E3C9500BCF0CB /* FirebaseFirestoreSwift */; };
+		F4A689182A3E3C9500BCF0CB /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = F4A689172A3E3C9500BCF0CB /* FirebaseStorage */; };
 		F4B77B8628B92BBA00226F80 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4B77B8528B92BBA00226F80 /* LoginViewModel.swift */; };
 		F4B77B8828BC5D8D00226F80 /* UserInfoScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4B77B8728BC5D8D00226F80 /* UserInfoScreen.swift */; };
 		F4BC598C28BD159D00D16259 /* UserInfoScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4BC598B28BD159D00D16259 /* UserInfoScreenViewModel.swift */; };
@@ -37,9 +39,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		02CDCEA73D2C0B3AA518E1D7 /* Pods-God is Love.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-God is Love.debug.xcconfig"; path = "Target Support Files/Pods-God is Love/Pods-God is Love.debug.xcconfig"; sourceTree = "<group>"; };
-		14F6D36E904BD18514B1D345 /* Pods-God is Love.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-God is Love.release.xcconfig"; path = "Target Support Files/Pods-God is Love/Pods-God is Love.release.xcconfig"; sourceTree = "<group>"; };
-		3D8FEC55B8D782635F3B211D /* Pods_God_is_Love.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_God_is_Love.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F41F602528B5D600008A4EBF /* God is Love.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "God is Love.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F41F602828B5D600008A4EBF /* God_is_LoveApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = God_is_LoveApp.swift; sourceTree = "<group>"; };
 		F41F602A28B5D600008A4EBF /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -75,37 +74,20 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D97A846719F496C6F4753532 /* Pods_God_is_Love.framework in Frameworks */,
+				F4A689182A3E3C9500BCF0CB /* FirebaseStorage in Frameworks */,
+				F4A689142A3E3C9500BCF0CB /* FirebaseAuth in Frameworks */,
+				F4A689162A3E3C9500BCF0CB /* FirebaseFirestoreSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		2164F88F44D2ACAAD17030AA /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				02CDCEA73D2C0B3AA518E1D7 /* Pods-God is Love.debug.xcconfig */,
-				14F6D36E904BD18514B1D345 /* Pods-God is Love.release.xcconfig */,
-			);
-			path = Pods;
-			sourceTree = "<group>";
-		};
-		2B43FCAC496496BAB1AC1F0D /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				3D8FEC55B8D782635F3B211D /* Pods_God_is_Love.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 		F41F601C28B5D600008A4EBF = {
 			isa = PBXGroup;
 			children = (
 				F41F602728B5D600008A4EBF /* God is Love */,
 				F41F602628B5D600008A4EBF /* Products */,
-				2164F88F44D2ACAAD17030AA /* Pods */,
-				2B43FCAC496496BAB1AC1F0D /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -230,17 +212,20 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = F41F603828B5D601008A4EBF /* Build configuration list for PBXNativeTarget "God is Love" */;
 			buildPhases = (
-				590FB34502A889DCF1B3ED8A /* [CP] Check Pods Manifest.lock */,
 				F41F602128B5D600008A4EBF /* Sources */,
 				F41F602228B5D600008A4EBF /* Frameworks */,
 				F41F602328B5D600008A4EBF /* Resources */,
-				AEAE66F98B84F8D005470D9A /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = "God is Love";
+			packageProductDependencies = (
+				F4A689132A3E3C9500BCF0CB /* FirebaseAuth */,
+				F4A689152A3E3C9500BCF0CB /* FirebaseFirestoreSwift */,
+				F4A689172A3E3C9500BCF0CB /* FirebaseStorage */,
+			);
 			productName = "God is Love";
 			productReference = F41F602528B5D600008A4EBF /* God is Love.app */;
 			productType = "com.apple.product-type.application";
@@ -269,6 +254,9 @@
 				Base,
 			);
 			mainGroup = F41F601C28B5D600008A4EBF;
+			packageReferences = (
+				F4A689122A3E3C9500BCF0CB /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			productRefGroup = F41F602628B5D600008A4EBF /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -290,48 +278,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		590FB34502A889DCF1B3ED8A /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-God is Love-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		AEAE66F98B84F8D005470D9A /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-God is Love/Pods-God is Love-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-God is Love/Pods-God is Love-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-God is Love/Pods-God is Love-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		F41F602128B5D600008A4EBF /* Sources */ = {
@@ -483,7 +429,6 @@
 		};
 		F41F603928B5D601008A4EBF /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 02CDCEA73D2C0B3AA518E1D7 /* Pods-God is Love.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -514,7 +459,6 @@
 		};
 		F41F603A28B5D601008A4EBF /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 14F6D36E904BD18514B1D345 /* Pods-God is Love.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -565,6 +509,35 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		F4A689122A3E3C9500BCF0CB /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 10.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		F4A689132A3E3C9500BCF0CB /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F4A689122A3E3C9500BCF0CB /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		F4A689152A3E3C9500BCF0CB /* FirebaseFirestoreSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F4A689122A3E3C9500BCF0CB /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestoreSwift;
+		};
+		F4A689172A3E3C9500BCF0CB /* FirebaseStorage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F4A689122A3E3C9500BCF0CB /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseStorage;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		F41F603328B5D601008A4EBF /* God_is_Love.xcdatamodeld */ = {
